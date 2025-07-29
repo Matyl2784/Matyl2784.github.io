@@ -53,7 +53,7 @@ body{
 }
 
 #header{
-    background-image: url("../images/header-background.jpg");
+    background-image: url("header-background.jpg");
     height: 670px;
     text-align: center;
     background-position: center;
