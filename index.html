@@ -2,27 +2,13 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<title>😏 Specialní překvapení</title>
+<title>🎵 Překvapení</title>
 <style>
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  color: white;
-  font-family: sans-serif;
-}
-button {
-  font-size: 2rem;
-  padding: 1rem 2rem;
-  cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  background: red;
-  color: white;
+  background: black;
 }
 iframe {
   position: absolute;
@@ -34,15 +20,30 @@ iframe {
 </head>
 <body>
 
-<button id="startBtn">▶ Spustit video</button>
+<!-- Nejprve ztlumený autoplay -->
+<iframe id="rickroll" 
+  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0"
+  allow="autoplay; fullscreen; encrypted-media" 
+  allowfullscreen>
+</iframe>
 
 <script>
-document.getElementById('startBtn').addEventListener('click', function() {
-  document.body.innerHTML = `
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0"
-      allow="autoplay; fullscreen; encrypted-media" allowfullscreen>
-    </iframe>
-  `;
+let iframe = document.getElementById('rickroll');
+
+// Pokus o zapnutí zvuku po 1 sekundě
+setTimeout(() => {
+  let src = iframe.src;
+  if (src.includes('mute=1')) {
+    iframe.src = src.replace('mute=1', 'mute=0');
+  }
+}, 1000);
+
+// Další pokus po interakci (pokud uživatel klikne/tapne kdekoliv)
+document.body.addEventListener('click', () => {
+  let src = iframe.src;
+  if (src.includes('mute=1')) {
+    iframe.src = src.replace('mute=1', 'mute=0');
+  }
 });
 </script>
 
