@@ -2,67 +2,56 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<title>JUJKY😲😜</title>
+<title>Jujky😲😜</title>
 <style>
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: black;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
 }
-#player {
+button {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: #8e000a;
+  color: white;
+}
+iframe {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
+  border: none;
 }
 </style>
 </head>
 <body>
 
-<div id="player"></div>
+<button id="startBtn">Opravdu otevřít stránku</button>
 
 <script>
-// 1) Načteme YouTube API
-let tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-document.head.appendChild(tag);
+document.getElementById('startBtn').addEventListener('click', function() {
+  document.body.innerHTML = `
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0"
+      allow="autoplay; fullscreen; encrypted-media" allowfullscreen>
+    </iframe>
+    <iframe 
+  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&controls=0&showinfo=0&modestbranding=1"
+  frameborder="0"
+  allow="autoplay; fullscreen; encrypted-media"
+  allowfullscreen
+  style="position:absolute;top:0;left:0;width:100%;height:100%;">
+</iframe>
 
-let player;
-
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('player', {
-    videoId: 'dQw4w9WgXcQ',
-    playerVars: {
-      autoplay: 1,
-      controls: 0,
-      modestbranding: 1,
-      rel: 0,
-      showinfo: 0,
-      fs: 1
-    },
-    events: {
-      'onReady': onPlayerReady
-    }
-  });
-}
-
-function onPlayerReady(event) {
-  // Nastavení hlasitosti na 100 %
-  event.target.setVolume(100);
-
-  // Pokus o přehrání se zvukem
-  event.target.unMute();
-  event.target.playVideo();
-
-  // Další pokus po kliknutí (pro prohlížeče s autoplay blokací)
-  document.body.addEventListener('click', () => {
-    event.target.unMute();
-    event.target.setVolume(100);
-    event.target.playVideo();
-  });
-}
+  `;
+});
 </script>
-
 </body>
 </html>
