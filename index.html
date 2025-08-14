@@ -1,171 +1,51 @@
 <!DOCTYPE html>
 <html lang="cs">
-    <head>
-        <meta charset="utf-8">
-        <title>Retrokino</title>
-        <!--kaskádové styly v -->
-        <style>
-            /*p{color: red;}*/
-        </style>
-        <!--kaskadove styly pomoci soubrou-->
-        <link rel="stylesheet" href="style.css">
-        <!--fonty-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Zilla+Slab:wght@400;700&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <ul id="main-nav">
-            <li><a href="#header">retro<id id="kino">kino</id></a></li>
-            <li><a href="#novinky0">novinky</a></li>
-            <li><a href="#program0">program</a></li>
-            <li><a href="#vyprodano0">nákup vstupenek</a></li>
-            <li><a href="#kontakty0">kontakt</a></li>
-        </ul>
-        <div id="header">
-            <img id="logo" src="header-logo.svg" alt="Logo retrokino">
-            <p id="novinky0"></p>
-        </div>
-        <div id="novinky">
-                <h2 id="2">Novinky</h2>
-            <p class="subtitle" id="novinky2">Právě uvádíme původní trilogii Star Wars v originálním znění i s dabingem.</p>
-            <div id="filmy_div">
-                <a href="https://www.csfd.cz/film/6169-star-wars-epizoda-iv-nova-nadeje/prehled/" target="_blank"><img src="01-sw4.jpg" alt="plakát aktuálního filmu" class="filmy"></a>
-                <a href="https://www.csfd.cz/film/5238-star-wars-epizoda-v-imperium-vraci-uder/prehled/" target="_blank"><img src="02-sw5.jpg" alt="plakát aktuálního filmu" class="filmy"></a>
-                <a href="https://www.csfd.cz/film/6474-star-wars-epizoda-vi-navrat-jediu/prehled/" target="_blank"><img src="03-sw6.jpg" alt="plakát aktuálního filmu" class="filmy"></a><p id="program0"></p>
-            </div>
-        </div>
-        <h2 id="3">Program</h2>
-        <p class="subtitle">Máte rádi klasické filmy? Vyberte si z naší široké nabídky.</p>
-        <table id="tabulka">
-            <tr>
-                <th id="prazdny"></th>
-                <th>Po</th>
-                <th>Út</th>
-                <th>St</th>
-                <th>Čt</th>
-                <th>Pá</th>
-                <th>So</th>
-                <th>Ne</th>
-            </tr>
-            <tr>
-                <td class="filmy_tabulka">Star Wars: Nová naděje</td>
-                <td>18:00</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>18:00</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="filmy_tabulka">Star Wars: Impérium vrací úder</td>
-                <td></td>
-                <td>18:00</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>20:30</td>
-                <td></td>
-            </tr>            
-            <tr>
-                <td class="filmy_tabulka">Star Wars: Návrat Jediho</td>
-                <td></td>
-                <td></td>
-                <td>18:00</td>
-                <td></td>
-                <td></td>
-                <td>23:00</td>
-                <td></td>
-            </tr>            
-            <tr>
-                <td class="filmy_tabulka">ET Mimozemšťan</td>
-                <td colspan="7"><i>- zrušeno -</i></td>
-            </tr>           
-            <tr>
-                <td class="filmy_tabulka">Vetřelec</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>20:30</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>            
-            <tr>
-                <td class="filmy_tabulka">Titanic</td>
-                <td></td>
-                <td>20:30</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>20:30</td>
-            </tr>
-            <tr>
-                <td class="filmy_tabulka">Vesničko má středisková</td>
-                <td>16:00</td>
-                <td></td>
-                <td></td>
-                <td class="cervene">18:00</td>
-                <td>16:00</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="filmy_tabulka">Vrchní prchni</td>
-                <td></td>
-                <td></td>
-                <td>16:00</td>
-                <td></td>
-                <td>18:00</td>
-                <td class="cervene">16:00</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="filmy_tabulka">Indiana Jones a dobyvatelé ztracené archy</td>
-                <td></td>
-                <td>20:30</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="filmy_tabulka">Návrat do budoucnosti</td>
-                <td>20:30</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>18:00</td>
-            </tr>
-        </table>
-        <p id="vyprodano0">* červeně označené termíny jsou již vyprodané.</p>
-        <div id="nakup">
-            <h2 id="4">Nákup vstupenek</h2>
-            <p class="subtitle">Nenechte si vyfouknout své oblíbené místo a vstupenku si zarezervujte.</p>
-            <h4 id="telefon">+420 123 456 789</h4>
-            <p id="oteviraci_doba">Dostupné denně od 15:00 do 23:00</p>
-        </div>
-        <img class="ikony" src="ico01.svg" alt="Ikona1">
-        <img class="ikony" src="ico02.svg" alt="Ikona2">
-        <img class="ikony" src="ico03.svg" alt="Ikona3">
-        <div id="kontakty">
-            <h2 id="kontakty0">Kontakt</h2>
-            <p id="prijdte">Přijďte se podívat na film, nebo nás jen pozdravit.</p>
-            <ul id="ucebna">
-                <li id="ucebna2">Učebna 52</li>
-                <li id="skola">SPŠ Purkyňova</li>
-                <li id="adresa">Purkyňova 97, Brno, 612 00</li>
-            </ul>
-        </div>
-        <div id="konec">
-        <p id="petr"><id id="c">©</id> Petr Šavelka</p>
-        <p id="autor">Autorem některých použitých grafických prvků je <a href="https://www.freepik.com/author/macrovector" target="_blank" id="freepik">macrovector/freepik</a>.</p>
-        <p id="web">Tento web byl vytvořen pouze pro účely výuky webdesignu</p>
-        </div>
-    </body>
+<head>
+<meta charset="UTF-8">
+<title>😏 Specialní překvapení</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
+}
+button {
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: red;
+  color: white;
+}
+iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+</style>
+</head>
+<body>
+
+<button id="startBtn">▶ Spustit video</button>
+
+<script>
+document.getElementById('startBtn').addEventListener('click', function() {
+  document.body.innerHTML = `
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0"
+      allow="autoplay; fullscreen; encrypted-media" allowfullscreen>
+    </iframe>
+  `;
+});
+</script>
+
+</body>
 </html>
+
