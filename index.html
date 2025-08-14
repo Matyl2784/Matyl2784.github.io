@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>Jujky😲😜</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
+}
+button {
+  vertical-align: middle;
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  border: none;
+  transition: ease;
+  border-radius: 8px;
+  background: #8e000a;
+  color: white;
+  margin: 10px;
+}
+#btn2 {
+  font-size: 1rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: #8e000a;
+  color: white;
+  text-decoration: none;
+  margin: 10px;
+}
+iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+.break {
+  flex-basis: 100%;
+  padding-bottom: 10%;
+}
+#text {
+  font-size: 20px;
+}
+
+</style>
+</head>
+<body>
+
+<div>
+<a id="text">Chceš pokračovat?</a>
+
+<div class="break"></div>
+
+<button id="btn1", onclick="Funkce()">POKRAČOVAT!!!</button>
+
+<a id="btn2", href="retrokino/index.html">možná spíš něco normálního</a>
+</div>
+
+<script>
+var clickcount = 0;
+function Funkce() {
+  const btn1 = document.getElementById("btn1");
+  const btn2 = document.getElementById("btn2");
+  const text = document.getElementById("text");
+  const list = ["Jsi si jístý?", "Vážně??", "OPRAVDU???", "ok, tak jo"];
+  const list_1 = ["ano", "ANO", "JO JSEM SI JISTÝ CHCI POKRAČOVAT", "yippee"];
+  const list_2 = ["ne, chci radši něco normálního", "no dobře, radši ne", "nenene, ok radši to víc normální", "bohužel, už to nejde zpět"];
+
+  if (clickcount<4){
+    btn1.innerHTML = list_1[clickcount];
+    btn2.innerHTML = list_2[clickcount];
+    text.innerHTML = list[clickcount];
+  }
+  else{
+  document.getElementById('btn1').addEventListener('click', function() {
+  document.body.innerHTML = `
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0"
+      allow="autoplay; fullscreen; encrypted-media" allowfullscreen>
+    </iframe>
+    <iframe 
+  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&controls=0&showinfo=0&modestbranding=1"
+  frameborder="0"
+  allow="autoplay; fullscreen; encrypted-media"
+  allowfullscreen
+  style="position:absolute;top:0;left:0;width:100%;height:100%;">
+</iframe>`;
+})}
+  clickcount++  
+}
+</script>
+</body>
+</html>
