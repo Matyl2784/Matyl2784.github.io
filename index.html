@@ -12,9 +12,15 @@ html, body {
   align-items: center;
   text-align: center;
   display: flex;
-  background-color: black;
   color: white;
   font-family: sans-serif;
+  background-image: url("horizontal.jpg");
+  background-size: cover;
+}
+@media (max-width: 850px) {
+  body {
+    background-image: url("vertical.jpg");
+  }
 }
 button {
   vertical-align: middle;
@@ -110,6 +116,7 @@ function Funkce() {
 </script>
 </body>
 </html>
+
 
 
 
