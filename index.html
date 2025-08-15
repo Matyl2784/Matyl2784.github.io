@@ -83,12 +83,15 @@ function Funkce() {
   const list_1 = ["ano", "ANO", "JO JSEM SI JISTÝ CHCI POKRAČOVAT", "yippee"];
   const list_2 = ["ne, chci radši něco normálního", "no dobře, radši ne", "nenene, ok radši to víc normální", "bohužel, už to nejde zpět"];
 
-  if (clickcount<4){
+  if (clickcount<3){
     btn1.innerHTML = list_1[clickcount];
     btn2.innerHTML = list_2[clickcount];
     text.innerHTML = list[clickcount];
   }
   else{
+    btn1.innerHTML = list_1[clickcount];
+    btn2.innerHTML = list_2[clickcount];
+    text.innerHTML = list[clickcount];
   document.getElementById('btn1').addEventListener('click', function() {
   document.body.innerHTML = `
     <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0"
@@ -107,6 +110,7 @@ function Funkce() {
 </script>
 </body>
 </html>
+
 
 
 
