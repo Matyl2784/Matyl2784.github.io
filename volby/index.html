@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Parodický Party Campaign Generator</title>
+  <style>
+    :root{--bg:#0f1724;--card-bg:#fff;--accent:#ef4444}
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#071025 0%, #0f1724 100%);color:#e6eef8}
+    .wrap{max-width:1100px;margin:28px auto;padding:24px}
+    header{display:flex;align-items:center;gap:16px}
+    header h1{margin:0;font-size:20px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px}
+    .panel{background:rgba(255,255,255,0.04);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    label{display:block;font-size:13px;margin-bottom:6px;color:#bcd3ff}
+    input[type=text],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit}
+    .row{display:flex;gap:8px}
+    button{background:var(--accent);border:none;padding:10px 12px;border-radius:8px;color:white;cursor:pointer}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.08)}
+    .card-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .preview{width:800px;max-width:100%;border-radius:12px;overflow:hidden;position:relative;background:#ddd}
+    .meta{display:flex;gap:12px;align-items:center}
+    .disclaimer{font-size:13px;color:#ffd1d1;background:#3a0f0f;padding:10px;border-radius:8px}
+    footer{margin-top:14px;font-size:13px;color:#9fb6ff}
+    .controls-group{margin-bottom:12px}
+    .logo-preview{width:72px;height:72px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700}
+    /* campaign card visuals inside DOM (but we'll draw to canvas for download) */
+    .card{position:relative;width:1200px;height:675px;max-width:100%;background:#ddd}
+    .card .img{position:absolute;inset:0;background-size:cover;background-position:center}
+    .card .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.55))}
+    .card .left{position:absolute;left:40px;top:40px;color:white}
+    .party-name{font-size:56px;line-height:0.9;margin:0;font-weight:800;letter-spacing:-1px}
+    .slogan{font-size:22px;margin-top:10px;opacity:0.95}
+    .logo{position:absolute;right:40px;top:36px;width:140px;height:140px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:800}
+    .parody-tag{position:absolute;left:50%;transform:translateX(-50%);bottom:20px;background:rgba(255,255,255,0.12);color:white;padding:6px 12px;border-radius:999px;font-weight:700}
+    .watermark{position:absolute;left:20px;bottom:20px;color:rgba(255,255,255,0.18);font-weight:800;font-size:48px;letter-spacing:6px}
+    .small-muted{font-size:13px;color:#9fb6ff}
+    .footer-links a{color:#bcd3ff;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#ef4444"/><path d="M6 14L10 9l4 7 4-12" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <h1>Parodický Party Campaign Generator — jednoduchý &amp; ready na GitHub Pages</h1>
+        <div class="small-muted">Automaticky vytvoří kampaňové náhledy se spoof logem, sloganem a "PARODIE" watermarkem.</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="controls">
+          <div class="controls-group">
+            <label>Název strany (nebo Leave blank pro náhodu)</label>
+            <input id="partyName" type="text" placeholder="Např. Obyčejní Lidé & Spravedlnost" />
+          </div>
+          <div class="controls-group">
+            <label>Slogan (leave blank pro náhodu)</label>
+            <input id="slogan" type="text" placeholder="Silní pro budoucnost" />
+          </div>
+          <div class="controls-group">
+            <label>Styl / barva (vyber tématickou barvu)</label>
+            <select id="style">
+              <option value="#ef4444">Odvážná červená</option>
+              <option value="#0ea5a4">Moderní zelená</option>
+              <option value="#2563eb">Konzervativní modrá</option>
+              <option value="#f59e0b">Optimistická žlutá</option>
+            </select>
+          </div>
+          <div class="controls-group row">
+            <div style="flex:1">
+              <label>Spoof logo text (zkratka)</label>
+              <input id="logoText" type="text" maxlength="6" placeholder="ZKRT" />
+            </div>
+            <div style="width:120px">
+              <label>Seed (pro reprodukovatelnost)</label>
+              <input id="seed" type="text" placeholder="(random)" />
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button id="genBtn">Generovat</button>
+            <button class="secondary" id="regenBtn">Regenerovat obrázek</button>
+            <button class="secondary" id="downloadBtn">Stáhnout PNG</button>
+          </div>
+
+          <div style="margin-top:12px" class="disclaimer">
+            Poznámka: Tento nástroj vytváří satiru/parodii. Nevytvářej z toho skutečnou politickou reklamu. Vše je pro zábavu a ukázku.
+          </div>
+
+          <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.04)" />
+
+          <div class="small-muted">Jak nasadit na GitHub Pages: vlož tento soubor jako <strong>index.html</strong> do repozitáře, aktivuj Pages (branch main / root). Hotovo.</div>
+        </div>
+      </div>
+
+      <div class="panel card-wrap">
+        <div class="meta" style="width:100%;justify-content:space-between">
+          <div>
+            <div class="small-muted">Náhled</div>
+          </div>
+          <div class="small-muted footer-links">Hostuj na GitHub Pages — stačí repozitář bez backendu.</div>
+        </div>
+
+        <div id="preview" class="preview">
+          <!-- visible HTML preview (not the downloaded image itself) -->
+          <div class="card" id="card" style="width:1200px;height:675px">
+            <div class="img" id="bgImg" style="background-color:#222"></div>
+            <div class="overlay"></div>
+            <div class="left">
+              <div class="party-name" id="pn">STRANA</div>
+              <div class="slogan" id="sg">Slogan tady</div>
+            </div>
+            <div class="logo" id="logoBox" style="background:var(--accent)">PK</div>
+            <div class="parody-tag">PARODIE</div>
+            <div class="watermark">PARODIE</div>
+          </div>
+        </div>
+
+        <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+          <div class="small-muted">Tip: klikni "Stáhnout PNG" pro export. Pokud download nefunguje kvůli CORS, nahraj na GitHub Pages a opět zkus.</div>
+          <div class="small-muted">Verze: jednoduchý frontend (single file)</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div style="margin-top:14px">Potřebuješ, abych to upravil (např. přidat CSV export, víc jazyků nebo jiný zdroj obrázků)? Napiš — upravím to.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Helper: deterministic random from seed string
+    function seededRandom(s) {
+      if(!s) { let r = Math.random(); return ()=>r; }
+      let h=2166136261>>>0;
+      for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),16777619)}
+      return function(){h+=h<<13;h^=h>>>7;h+=h<<3;h^=h>>>17;return ((h>>>0)/4294967295);}
+    }
+
+    const slogans = [
+      "Silní pro zítřek",
+      "Společně lépe",
+      "Rozum nade strach",
+      "Změna, která funguje",
+      "Budoucnost bez keců",
+      "Práce, důstojnost, změna",
+      "Pro každého, ne pro vyvolené",
+      "Méně řečí, více činů",
+      "Srdcem pro lidi",
+      "Řešení místo slibů"
+    ];
+
+    const namesPartA = ["Obyčejní", "Noví", "Svoboda", "Lidé", "Budoucnost", "Solidární", "Zelení", "Obrana"];
+    const namesPartB = ["pro Česko", "21", "Aliance", "Hnutí", "Kolektiv", "Fronta", "Iniciativa", "Sjednocení"];
+
+    const pnEl = document.getElementById('pn');
+    const sgEl = document.getElementById('sg');
+    const logoEl = document.getElementById('logoBox');
+    const bgEl = document.getElementById('bgImg');
+
+    function randPick(arr, rnd) { return arr[Math.floor(rnd()*arr.length)]; }
+
+    function generate(reseed) {
+      const seedVal = document.getElementById('seed').value.trim();
+      const seed = seedVal || (reseed ? String(Date.now()) : '');
+      const rnd = seededRandom(seed || String(Math.random()));
+
+      // party name
+      let pn = document.getElementById('partyName').value.trim();
+      if(!pn) pn = randPick(namesPartA,rnd) + ' ' + randPick(namesPartB,rnd);
+      pnEl.textContent = pn.toUpperCase();
+
+      // slogan
+      let sg = document.getElementById('slogan').value.trim();
+      if(!sg) sg = randPick(slogans,rnd);
+      sgEl.textContent = sg;
+
+      // style color
+      const styleColor = document.getElementById('style').value;
+      document.documentElement.style.setProperty('--accent', styleColor);
+      logoEl.style.background = styleColor;
+
+      // logo
+      let logoText = document.getElementById('logoText').value.trim();
+      if(!logoText) {
+        logoText = pn.split(' ').map(x=>x[0]||'').slice(0,3).join('').toUpperCase();
+        if(!logoText) logoText = 'PK';
+      }
+      logoEl.textContent = logoText.toUpperCase();
+      logoEl.style.color = '#fff';
+      logoEl.style.fontSize = (logoText.length<=2? '44px' : (logoText.length==3? '34px':'24px'));
+
+      // background image from picsum (simple, CORS friendly)
+      const seedNum = Math.floor(rnd()*1000000);
+      const url = `https://picsum.photos/1200/675?random=${seedNum}`;
+      bgEl.style.backgroundImage = `url(${url})`;
+      bgEl.style.filter = 'contrast(0.95) saturate(0.9)';
+
+      // set watermark color subtle
+      document.querySelector('.watermark').style.color = 'rgba(255,255,255,0.12)';
+
+      // store current seed for reproducibility
+      document.getElementById('seed').value = seed;
+    }
+
+    document.getElementById('genBtn').addEventListener('click', ()=>generate(true));
+    document.getElementById('regenBtn').addEventListener('click', ()=>generate(true));
+
+    // canvas export
+    async function downloadPNG(){
+      const card = document.getElementById('card');
+      const rect = {w:1200,h:675};
+      const canvas = document.createElement('canvas');
+      canvas.width = rect.w; canvas.height = rect.h;
+      const ctx = canvas.getContext('2d');
+
+      // draw background image
+      const bgStyle = window.getComputedStyle(document.getElementById('bgImg'));
+      const bgUrl = (bgStyle.backgroundImage||'').replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+      try {
+        if(bgUrl){
+          const img = await loadImage(bgUrl);
+          ctx.drawImage(img,0,0,rect.w,rect.h);
+        } else {
+          ctx.fillStyle = '#222'; ctx.fillRect(0,0,rect.w,rect.h);
+        }
+      } catch(e){
+        // fallback: solid background
+        ctx.fillStyle='#222'; ctx.fillRect(0,0,rect.w,rect.h);
+        console.warn('Chyba při načítání obrázku (CORS?), použito pozadí místo obrázku.',e);
+      }
+
+      // overlay gradient
+      const g = ctx.createLinearGradient(0,0,0,rect.h);
+      g.addColorStop(0,'rgba(0,0,0,0.15)'); g.addColorStop(1,'rgba(0,0,0,0.55)');
+      ctx.fillStyle = g; ctx.fillRect(0,0,rect.w,rect.h);
+
+      // party name
+      ctx.font = '700 56px Inter, Roboto, Arial'; ctx.fillStyle = '#fff'; ctx.textAlign = 'left';
+      ctx.fillText(document.getElementById('pn').textContent, 40, 120);
+
+      // slogan
+      ctx.font = '22px Inter, Roboto, Arial'; ctx.fillStyle = 'rgba(255,255,255,0.95)';
+      wrapText(ctx, document.getElementById('sg').textContent, 40, 150, 520, 30);
+
+      // spoof logo box
+      const logo = document.getElementById('logoBox');
+      ctx.fillStyle = window.getComputedStyle(logo).backgroundColor || '#ef4444';
+      const lx = rect.w - 180; const ly = 40; const lw = 140; const lh = 140; const r=18;
+      roundRect(ctx,lx,ly,lw,lh,r,true,false);
+      ctx.fillStyle = '#fff'; ctx.font = '700 44px Inter, Roboto'; ctx.textAlign='center';
+      ctx.fillText(logo.textContent, lx+lw/2, ly+lw/2+12);
+
+      // PARODIE tag
+      ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.font='800 48px Inter, Arial'; ctx.textAlign='left';
+      ctx.fillText('PARODIE',20,rect.h-40);
+
+      // small tag bottom center
+      ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font='700 14px Inter, Arial'; ctx.textAlign='center';
+      ctx.fillText('Tento obrázek je satira/parodie — nevytvářej skutečnou politickou reklamu', rect.w/2, rect.h-18);
+
+      // trigger download
+      const url = canvas.toDataURL('image/png');
+      const a = document.createElement('a'); a.href = url; a.download = (document.getElementById('pn').textContent||'campaign') + '.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+
+    function loadImage(src){
+      return new Promise((res,rej)=>{
+        const img = new Image(); img.crossOrigin='anonymous'; img.onload = ()=>res(img); img.onerror = e=>rej(e); img.src = src;
+      });
+    }
+
+    function roundRect(ctx,x,y,w,h,r,fill,stroke){if(typeof r==='undefined')r=5;ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();if(fill){ctx.fill();}if(stroke){ctx.stroke();}}
+
+    function wrapText(ctx,text,x,y,maxWidth,lineHeight){
+      const words = text.split(' ');
+      let line = '';
+      for(let n=0;n<words.length;n++){
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if(testWidth > maxWidth && n>0){ctx.fillText(line, x, y); line = words[n] + ' '; y += lineHeight;} else {line = testLine;}}
+      ctx.fillText(line, x, y);
+    }
+
+    document.getElementById('downloadBtn').addEventListener('click', async ()=>{
+      try{ await downloadPNG(); } catch(e){ alert('Export selhal — zkus nasadit soubor na GitHub Pages nebo se podívej do konzole pro chybu.'); console.error(e); }
+    });
+
+    // init
+    generate(true);
+  </script>
+</body>
+</html>
