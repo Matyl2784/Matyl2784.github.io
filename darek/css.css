@@ -19,11 +19,11 @@ body {
   bottom: 0;
   text-align: end;
   width: 100%;
-  font-size: large;
+  font-size: xx-large;
 }
 
 #konec_text{
-      margin-right: 1%;
+      margin-right: 2%;
 }
 
 div#beach,
@@ -90,10 +90,10 @@ div#sea {
 }
 .giftbox{
   position: absolute;
-  width:300px;
-  height:200px;
+  width:600px;
+  height:400px;
   left:50%;
-  margin-left: -150px;
+  margin-left: -300px;
   bottom: 40px;
   z-index:10;
   &>div{
@@ -112,7 +112,7 @@ div#sea {
     content:"OtEvŘi Mě!";
     left: 0;
     bottom: 0;
-    font-size: 24px;
+    font-size: 90px;
     text-align: center;
     transform:rotate(-20deg);
     transform-origin:0 0;
@@ -445,3 +445,4 @@ div#sea {
     right: 230px;
   }
 }
+
