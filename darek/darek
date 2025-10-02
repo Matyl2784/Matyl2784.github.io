@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dárek — Ford Focus 2007</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#ffd166; --muted:#9aa8bf;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial}
+    body{
+      background:linear-gradient(180deg,#071029 0%, #081726 50%, #071022 100%);
+      color:#e6eef8;display:grid;place-items:center;padding:32px;
+    }
+
+    .wrap{width:100%;max-width:980px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:14px;padding:36px;box-shadow:0 10px 40px rgba(2,6,23,0.6);}
+
+    header{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+    header h1{font-size:20px;margin:0}
+    header p{margin:0;color:var(--muted)}
+
+    .stage{position:relative;height:340px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);display:flex;align-items:center;justify-content:center}
+
+    /* gift */
+    .gift{
+      width:160px;height:160px;background:linear-gradient(180deg,#c62828,#8b0000);border-radius:12px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;transform:translateY(0);transition:transform .5s cubic-bezier(.2,.9,.3,1);
+      box-shadow:0 12px 30px rgba(0,0,0,0.5), inset 0 -6px 12px rgba(0,0,0,0.15);
+    }
+    .gift:before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);width:24px;height:100%;background:linear-gradient(180deg,rgba(255,255,255,0.06),rgba(0,0,0,0.15));border-radius:6px}
+    .ribbon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:linear-gradient(180deg,#ffd166,#ffb03b);display:flex;align-items:center;justify-content:center;font-weight:700;color:#1b1b1b}
+
+    /* lid */
+    .lid{position:absolute;top:-8px;left:12px;right:12px;height:62px;background:#b71c1c;border-radius:10px;transform-origin:center bottom;transition:transform .7s cubic-bezier(.15,.85,.2,1);box-shadow:0 6px 14px rgba(0,0,0,0.35)}
+
+    .gift.open{transform:translateY(-18px)}
+    .gift.open .lid{transform:rotateX(65deg) translateY(-8px)}
+
+    /* car area */
+    .car-wrap{position:absolute;left:-30%;bottom:18px;width:100%;height:160px;pointer-events:none;}
+    .car{position:absolute;left:-40%;bottom:0;width:420px;max-width:70%;transform:translateX(0);transition:transform 1.2s cubic-bezier(.25,.9,.2,1)}
+    .car.drive{transform:translateX(140%)}
+
+    /* text reveal */
+    .message{position:absolute;top:18px;right:22px;background:rgba(255,255,255,0.03);padding:12px 16px;border-radius:10px;font-weight:700;color:var(--accent);backdrop-filter:blur(6px);opacity:0;transform:translateY(-8px);transition:opacity .6s ease,transform .6s ease}
+    .revealed{opacity:1;transform:translateY(0)}
+
+    .controls{display:flex;gap:8px;align-items:center;margin-top:18px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:10px 14px;border-radius:8px;color:inherit;cursor:pointer}
+    .btn.secondary{border-style: dashed}
+
+    footer{margin-top:12px;color:var(--muted);font-size:13px}
+
+    /* simple responsive */
+    @media (max-width:560px){.wrap{padding:18px}.stage{height:300px}.car{width:320px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#ffb703,#fb8500);display:grid;place-items:center;font-weight:700;color:#08111a">🎁</div>
+      <div>
+        <h1>Dárek — klikni a sleduj</h1>
+        <p>Když otevřeš, přijede auto a objeví se text s informací o jízdě zdarma.</p>
+      </div>
+    </header>
+
+    <div class="stage" id="stage">
+      <div class="message" id="message">dostáváš jednu jízdu zdarma!</div>
+
+      <div class="gift" id="gift" aria-label="Dárek" role="button" tabindex="0">
+        <div class="lid"></div>
+        <div class="ribbon">DF</div>
+      </div>
+
+      <div class="car-wrap" aria-hidden="true">
+        <!-- stylized Ford Focus 2007 - simplified SVG -->
+        <svg class="car" id="car" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- shadow -->
+          <ellipse cx="300" cy="170" rx="150" ry="18" fill="rgba(0,0,0,0.35)" />
+          <!-- body -->
+          <path d="M40 120 L110 90 L360 90 L520 120 L520 140 L480 140 L460 160 L360 160 L170 160 L120 150 L80 140 L40 140 Z" fill="#2b6ea8" stroke="#1f4f75" stroke-width="3"/>
+          <!-- windows -->
+          <path d="M125 95 L220 95 L300 95 L360 110 L230 110 L140 110 Z" fill="#cfe8ff" opacity="0.9" />
+          <!-- headlights -->
+          <ellipse cx="520" cy="120" rx="12" ry="8" fill="#fff6c6" opacity="0.95" />
+          <!-- wheels -->
+          <g>
+            <circle cx="170" cy="150" r="28" fill="#111" />
+            <circle cx="170" cy="150" r="12" fill="#9aa8bf" />
+            <circle cx="430" cy="150" r="28" fill="#111" />
+            <circle cx="430" cy="150" r="12" fill="#9aa8bf" />
+          </g>
+          <!-- small details -->
+          <rect x="370" y="122" width="70" height="8" rx="4" fill="#1f4f75" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="openBtn">Otevřít dárek</button>
+      <button class="btn secondary" id="resetBtn">Reset</button>
+      <div style="margin-left:auto;color:var(--muted);font-size:13px">Tip: můžeš kliknout na krabici nebo stisknout Enter</div>
+    </div>
+
+    <footer>Vyrobeno s ❤️ — Ford Focus 2007 (stylizované)</footer>
+  </div>
+
+  <script>
+    const gift = document.getElementById('gift');
+    const car = document.getElementById('car');
+    const message = document.getElementById('message');
+    const openBtn = document.getElementById('openBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let opened = false;
+
+    function openGift(){
+      if(opened) return;
+      opened = true;
+      gift.classList.add('open');
+      // delay car drive so it feels like it comes after opening
+      setTimeout(()=>{
+        car.classList.add('drive');
+      }, 650);
+      // reveal message slightly after car starts
+      setTimeout(()=>{
+        message.classList.add('revealed');
+      }, 1200);
+    }
+
+    function reset(){
+      opened = false;
+      gift.classList.remove('open');
+      car.classList.remove('drive');
+      message.classList.remove('revealed');
+    }
+
+    gift.addEventListener('click', openGift);
+    openBtn.addEventListener('click', openGift);
+    resetBtn.addEventListener('click', reset);
+
+    // keyboard accessibility
+    gift.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGift(); }
+    });
+  </script>
+</body>
+</html>
