@@ -37,7 +37,7 @@ canvas#canvas {
 
 div#beach {
   background-image: url(https://dl.dropbox.com/s/oe0oce2udq44bj5/beachsil2.png);
-  /* background-size: cover; */
+  /* background-size: covver; */
   background-position: bottom right;
   background-size: 1700px;
     background-repeat: no-repeat;
@@ -445,4 +445,5 @@ div#sea {
     right: 230px;
   }
 }
+
 
