@@ -1,0 +1,943 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rumps - Rosťa Pijáček & Luboš Raš</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #0a0a0a;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(220, 20, 60, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, #0a0a0a 0%, #1a0505 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(40, 0, 0, 0.95) 100%);
+            padding: 50px 20px;
+            box-shadow: 0 10px 40px rgba(220, 20, 60, 0.3);
+            margin-bottom: 0;
+            border-bottom: 3px solid #DC143C;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(220, 20, 60, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .header-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 4.5em;
+            margin-bottom: 15px;
+            text-shadow: 
+                0 0 30px rgba(220, 20, 60, 0.8),
+                0 0 60px rgba(220, 20, 60, 0.5),
+                3px 3px 15px rgba(0,0,0,0.9);
+            letter-spacing: 8px;
+            font-weight: 900;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 30px rgba(220, 20, 60, 0.8), 0 0 60px rgba(220, 20, 60, 0.5), 3px 3px 15px rgba(0,0,0,0.9); }
+            50% { text-shadow: 0 0 40px rgba(220, 20, 60, 1), 0 0 80px rgba(220, 20, 60, 0.7), 3px 3px 15px rgba(0,0,0,0.9); }
+        }
+
+        .subtitle {
+            color: #DC143C;
+            font-size: 1.6em;
+            font-style: italic;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            background: rgba(10, 10, 10, 0.9);
+            padding: 0;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.8);
+            border-bottom: 2px solid #DC143C;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav button {
+            background: transparent;
+            color: #bbb;
+            border: none;
+            border-right: 1px solid #333;
+            padding: 20px 35px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        nav button:last-child {
+            border-right: none;
+        }
+
+        nav button::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: #DC143C;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px #DC143C;
+        }
+
+        nav button:hover {
+            color: #fff;
+            background: rgba(220, 20, 60, 0.1);
+        }
+
+        nav button:hover::before {
+            width: 80%;
+        }
+
+        nav button.active {
+            color: #DC143C;
+            background: rgba(220, 20, 60, 0.15);
+        }
+
+        nav button.active::before {
+            width: 80%;
+        }
+
+        .content {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            min-height: 500px;
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #DC143C;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #DC143C;
+            padding-bottom: 15px;
+            font-size: 2.5em;
+            text-shadow: 0 0 20px rgba(220, 20, 60, 0.5);
+        }
+
+        h3 {
+            color: #DC143C;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .repertoar-item {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.8) 0%, rgba(30, 30, 30, 0.8) 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #DC143C;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            border: 1px solid rgba(220, 20, 60, 0.2);
+        }
+
+        .repertoar-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 30px rgba(220, 20, 60, 0.4);
+            border-left-width: 8px;
+        }
+
+        .repertoar-item p {
+            line-height: 1.9;
+            color: #ccc;
+        }
+
+        .audio-item {
+            background: linear-gradient(135deg, rgba(50, 50, 50, 0.8) 0%, rgba(40, 40, 40, 0.8) 100%);
+            padding: 20px 25px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #DC143C;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(220, 20, 60, 0.2);
+        }
+
+        .audio-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 30px rgba(220, 20, 60, 0.3);
+        }
+
+        .audio-icon {
+            font-size: 2em;
+        }
+
+        .audio-title {
+            flex: 1;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .play-button {
+            background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(220, 20, 60, 0.4);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(220, 20, 60, 0.6);
+        }
+
+        .video-placeholder {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9) 0%, rgba(20, 20, 20, 0.9) 100%);
+            padding: 50px;
+            text-align: center;
+            border-radius: 15px;
+            border: 2px solid #DC143C;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 40px rgba(220, 20, 60, 0.4);
+        }
+
+        .concerts-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .next-concert-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 30px rgba(220, 20, 60, 0.6);
+            animation: pulse-badge 2s ease-in-out infinite;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); box-shadow: 0 5px 30px rgba(220, 20, 60, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 40px rgba(220, 20, 60, 0.9); }
+        }
+
+        .concerts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            align-items: start;
+        }
+
+        .concert-card {
+            background: linear-gradient(135deg, rgba(50, 50, 50, 0.9) 0%, rgba(30, 30, 30, 0.9) 100%);
+            padding: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            transition: all 0.4s ease;
+            border: 2px solid rgba(220, 20, 60, 0.3);
+            position: relative;
+        }
+
+        .concert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #DC143C 0%, #8B0000 100%);
+        }
+
+        .concert-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(220, 20, 60, 0.5);
+            border-color: #DC143C;
+        }
+
+        .concert-card.next-concert {
+            border: 3px solid #DC143C;
+            box-shadow: 0 15px 50px rgba(220, 20, 60, 0.7);
+        }
+
+        .concert-card.next-concert:hover {
+            transform: translateY(-10px);
+        }
+
+        .concert-card.next-concert::before {
+            height: 8px;
+            background: linear-gradient(90deg, #DC143C, #FF1744, #DC143C);
+            background-size: 200% 100%;
+            animation: slideGradient 2s linear infinite;
+        }
+
+        @keyframes slideGradient {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .concert-header {
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.3) 0%, rgba(139, 0, 0, 0.3) 100%);
+            padding: 25px;
+            text-align: center;
+        }
+
+        .concert-date-big {
+            font-size: 3em;
+            font-weight: 900;
+            color: #DC143C;
+            text-shadow: 0 0 20px rgba(220, 20, 60, 0.8);
+            line-height: 1;
+        }
+
+        .concert-day {
+            font-size: 1.2em;
+            color: #fff;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .concert-body {
+            padding: 25px;
+        }
+
+        .concert-venue {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .concert-location {
+            color: #DC143C;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .concert-time {
+            color: #ccc;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .concert-special {
+            background: rgba(220, 20, 60, 0.2);
+            color: #DC143C;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            border: 1px solid rgba(220, 20, 60, 0.4);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .gallery-item {
+            background: linear-gradient(135deg, rgba(220, 20, 60, 0.3) 0%, rgba(139, 0, 0, 0.3) 100%);
+            height: 250px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid rgba(220, 20, 60, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .gallery-item:hover::before {
+            left: 100%;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 50px rgba(220, 20, 60, 0.6);
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, rgba(50, 50, 50, 0.8) 0%, rgba(30, 30, 30, 0.8) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid rgba(220, 20, 60, 0.3);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .contact-info:hover {
+            border-color: #DC143C;
+            box-shadow: 0 10px 40px rgba(220, 20, 60, 0.4);
+        }
+
+        .contact-info p {
+            margin: 12px 0;
+            font-size: 1.15em;
+            color: #ccc;
+        }
+
+        .contact-info a {
+            color: #DC143C;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(220, 20, 60, 0.8);
+        }
+
+        .visitor-counter {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9) 0%, rgba(20, 20, 20, 0.9) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border: 2px solid rgba(220, 20, 60, 0.3);
+        }
+
+        .counter-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #DC143C;
+            margin: 15px 0;
+            text-shadow: 0 0 30px rgba(220, 20, 60, 0.8);
+        }
+
+        footer {
+            text-align: center;
+            color: #888;
+            margin-top: 50px;
+            padding: 30px;
+            border-top: 2px solid rgba(220, 20, 60, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+                letter-spacing: 3px;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav button {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #333;
+            }
+
+            .concerts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .concert-date-big {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>🎸 RUMPS 🎸</h1>
+                <p class="subtitle">Rosťa Pijáček & Luboš Raš</p>
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li><button onclick="showPage('uvod')" class="active">Úvod</button></li>
+                <li><button onclick="showPage('repertoar')">Repertoár</button></li>
+                <li><button onclick="showPage('ukazky')">Ukázky</button></li>
+                <li><button onclick="showPage('koncerty')">Koncerty</button></li>
+                <li><button onclick="showPage('obrazky')">Obrázky</button></li>
+                <li><button onclick="showPage('kontakt')">Kontakt</button></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- Úvodní stránka -->
+            <div id="uvod" class="page active">
+                <h2>Vítejte na stránkách kapely Rumps</h2>
+                <p style="font-size: 1.2em; line-height: 2;">Jsme hudební duo Rosťa Pijáček a Luboš Raš, které vás baví už mnoho let svým jedinečným repertoárem a energickými vystoupeními.</p>
+                <p style="margin-top: 20px; font-size: 1.1em; line-height: 2;">Naše hudba je směsicí nejrůznějších žánrů - od legendárních Pink Floyd a Beatles, přes české legendy jako Vladimír Mišík a Marsyas, až po naše vlastní originální skladby.</p>
+                <p style="margin-top: 20px; font-size: 1.1em; line-height: 2;">Hrajeme na soukromých akcích, firemních večírcích, svatbách i veřejných koncertech. Těšíme se na setkání s vámi!</p>
+                <p style="margin-top: 20px; font-size: 1.1em; line-height: 2;">Tato stránka je zkušební verze, aktuální oficiální stránky této kapely jsou <href src="https://rumps.cz/">rumps.cz</href></p>
+            </div>
+
+            <!-- Repertoár -->
+            <div id="repertoar" class="page">
+                <h2>Náš repertoár</h2>
+                <p style="font-size: 1.1em; margin-bottom: 30px; color: #ccc;">Hrajeme následující skladby:</p>
+                
+                <div class="repertoar-item">
+                    <h3>🎸 Pink Floyd</h3>
+                    <p>The Gnome, Wish You Were Here, Summer 68, Brain Damage, Eclipse, Shine On You Crazy Diamond, Comfortably Numb, Welcome To The Machine, Pigs, Time, Money, Hey You</p>
+                </div>
+                
+                <div class="repertoar-item">
+                    <h3>🎵 Beatles</h3>
+                    <p>Norwegian Wood, Here There And Everywhere, Mother Nature's Son, Do Not Let Me Down, And I Love Her, Ticket To Ride, I Should Have Known Better, When I'm 64, Golden Slumbers</p>
+                </div>
+                
+                <div class="repertoar-item">
+                    <h3>🎹 Marsyas</h3>
+                    <p>Podívám se zblízka, Slunce a déšť, Tajemství, Studená koupel, Na poslední chvíli, Zlato a stříbro, S Luisem</p>
+                </div>
+                
+                <div class="repertoar-item">
+                    <h3>🎤 Vladimír Mišík</h3>
+                    <p>Stříhali dohola malého chlapečka, Sluneční hrob, Obelisk, Co jsem si vzal, Dým, Za vodou, Variace na renesanční téma</p>
+                </div>
+                
+                <div class="repertoar-item">
+                    <h3>🎺 Ladislav Pospíšil</h3>
+                    <p>Karina, Tenhle vítr jsem měl rád</p>
+                </div>
+                
+                <div class="repertoar-item">
+                    <h3>🎻 Pavel Kalandra</h3>
+                    <p>Chci tě znát, Zvláštní tvář, Měšťácký Blues</p>
+                </div>
+                
+                <div class="repertoar-item">
+                    <h3>🌊 Vltava</h3>
+                    <p>Bezvadnej chlap</p>
+                </div>
+                
+                <div class="repertoar-item">
+                    <h3>⭐ Vlastní skladby</h3>
+                    <p>Neděle, Rubín, Cesta, Majka, Konec světa, Mezírky, Los, Ulice, Župan, Sen, Host, Paní Rýšová, Felix, Trojan</p>
+                </div>
+            </div>
+
+            <!-- Ukázky -->
+            <div id="ukazky" class="page">
+                <h2>Ukázky naší tvorby</h2>
+                
+                <h3 style="margin: 30px 0 20px 0; font-size: 1.5em;">🎵 Něco k poslechnutí:</h3>
+                
+                <div class="audio-item">
+                    <span class="audio-icon">🎵</span>
+                    <span class="audio-title">Don't Let Me Down</span>
+                    <button class="play-button">▶ Přehrát</button>
+                </div>
+                
+                <div class="audio-item">
+                    <span class="audio-icon">🎵</span>
+                    <span class="audio-title">Sen</span>
+                    <button class="play-button">▶ Přehrát</button>
+                </div>
+                
+                <div class="audio-item">
+                    <span class="audio-icon">🎵</span>
+                    <span class="audio-title">Cesta</span>
+                    <button class="play-button">▶ Přehrát</button>
+                </div>
+                
+                <div class="audio-item">
+                    <span class="audio-icon">🎵</span>
+                    <span class="audio-title">Sluneční hrob</span>
+                    <button class="play-button">▶ Přehrát</button>
+                </div>
+                
+                <h3 style="margin: 40px 0 20px 0; font-size: 1.5em;">🎬 Videa:</h3>
+                
+                <div class="video-placeholder">
+                    <p style="font-size: 1.5em; margin-bottom: 10px; color: #DC143C;">📹 Zahrádka - Semilaso</p>
+                    <p style="color: #ccc;">Klikněte pro přehrání videa</p>
+                </div>
+                
+                <div class="video-placeholder">
+                    <p style="font-size: 1.5em; margin-bottom: 10px; color: #DC143C;">📹 Muzikograf - Blansko</p>
+                    <p style="color: #ccc;">Klikněte pro přehrání videa</p>
+                </div>
+                
+                <div class="video-placeholder">
+                    <p style="font-size: 1.5em; margin-bottom: 10px; color: #DC143C;">📹 Sousedské slavnosti - Bílovice 2023</p>
+                    <p style="color: #ccc;">Klikněte pro přehrání videa</p>
+                </div>
+            </div>
+
+            <!-- Koncerty -->
+            <div id="koncerty" class="page">
+                <div class="concerts-header">
+                    <div class="next-concert-badge">🔥 Následující koncert 🔥</div>
+                    <h2>Koncerty v roce 2025</h2>
+                </div>
+                
+                <div class="concerts-grid">
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">24.1.</div>
+                            <div class="concert-day">Pátek</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Galerie Alfa</div>
+                            <div class="concert-location">📍 Bílovice nad Svitavou</div>
+                            <div class="concert-time">🕐 Začátek: 19:00</div>
+                            <div class="concert-special">⭐ Rekapitulace 90-tek</div>
+                        </div>
+                    </div>
+
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">13.6.</div>
+                            <div class="concert-day">Pátek</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Obřadní síň</div>
+                            <div class="concert-location">📍 Bílovice nad Svitavou</div>
+                            <div class="concert-time">🕐 Začátek: 19:00</div>
+                        </div>
+                    </div>
+
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">28.6.</div>
+                            <div class="concert-day">Sobota</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Polívky</div>
+                            <div class="concert-location">📍 Rájec</div>
+                            <div class="concert-time">🕐 Začátek: 14:00</div>
+                        </div>
+                    </div>
+
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">16.8.</div>
+                            <div class="concert-day">Sobota</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Zahrádka U Peťky</div>
+                            <div class="concert-location">📍 Doubravice</div>
+                            <div class="concert-time">🕐 Začátek: 19:00</div>
+                        </div>
+                    </div>
+
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">21.8.</div>
+                            <div class="concert-day">Čtvrtek</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Venkovní pódium</div>
+                            <div class="concert-location">📍 Kino Blansko</div>
+                            <div class="concert-time">🕐 Začátek: 19:30</div>
+                        </div>
+                    </div>
+
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">30.8.</div>
+                            <div class="concert-day">Sobota</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Bar Koruna</div>
+                            <div class="concert-location">📍 Blansko</div>
+                            <div class="concert-time">🕐 Začátek: 19:00</div>
+                        </div>
+                    </div>
+
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">21.11.</div>
+                            <div class="concert-day">Pátek</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Galerie Alfa</div>
+                            <div class="concert-location">📍 Bílovice nad Svitavou</div>
+                            <div class="concert-time">🕐 Začátek: 19:00</div>
+                        </div>
+                    </div>
+
+                    <div class="concert-card">
+                        <div class="concert-header">
+                            <div class="concert-date-big">29.11.</div>
+                            <div class="concert-day">Sobota</div>
+                        </div>
+                        <div class="concert-body">
+                            <div class="concert-venue">🎤 Bar Koruna</div>
+                            <div class="concert-location">📍 Blansko</div>
+                            <div class="concert-time">🕐 Začátek: 19:00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 50px; font-weight: bold; text-align: center; font-size: 1.4em; color: #DC143C;">
+                    🎸 Těšíme se na vás! 🎸
+                </p>
+            </div>
+
+            <!-- Obrázky -->
+            <div id="obrazky" class="page">
+                <h2>Fotogalerie</h2>
+                <div class="gallery">
+                    <div class="gallery-item">📷</div>
+                    <div class="gallery-item">📷</div>
+                    <div class="gallery-item">📷</div>
+                    <div class="gallery-item">📷</div>
+                    <div class="gallery-item">📷</div>
+                    <div class="gallery-item">📷</div>
+                    <div class="gallery-item">📷</div>
+                    <div class="gallery-item">📷</div>
+                </div>
+                <p style="margin-top: 30px; text-align: center; color: #ccc; font-size: 1.1em;">
+                    Kliknutím na ikonu zobrazíte fotografii
+                </p>
+            </div>
+
+            <!-- Kontakt -->
+            <div id="kontakt" class="page">
+                <h2>Kontaktujte nás</h2>
+                
+                <div class="contact-info">
+                    <h3>🎸 Rosťa Pijáček</h3>
+                    <p><strong>Telefon:</strong> <a href="tel:605210009">605 210 009</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:pijacek@vasbo.cz">pijacek@vasbo.cz</a></p>
+                </div>
+                
+                <div class="contact-info">
+                    <h3>🎵 Luboš Raš</h3>
+                    <p><strong>Telefon:</strong> <a href="tel:608821370">608 821 370</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:rumps@volny.cz">rumps@volny.cz</a></p>
+                </div>
+                
+                <p style="margin-top: 40px; text-align: center; font-size: 1.3em; font-weight: bold; color: #DC143C;">
+                    🎤 Rádi si s vámi domluvíme termín a repertoár pro vaši akci! 🎤
+                </p>
+            </div>
+        </div>
+
+        <div class="visitor-counter">
+            <p style="font-size: 1.2em; color: #ccc;">👥 Počet návštěv stránky:</p>
+            <div class="counter-number" id="counter">0</div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Rumps - Rosťa Pijáček & Luboš Raš | Všechna práva vyhrazena, zkušební verze</p>
+        </footer>
+    </div>
+
+    <script>
+        // Počítadlo návštěv
+        let visitCount = parseInt(Math.random() * 1500) + 800;
+        visitCount++;
+        document.getElementById('counter').textContent = visitCount;
+
+        // Funkce pro zjištění následujícího koncertu
+        function getNextConcert() {
+            const now = new Date();
+            
+            const concerts = [
+                { date: new Date(2025, 0, 24, 19, 0), id: 0 },  // 24.1.2025
+                { date: new Date(2025, 3, 19, 19, 0), id: 1 },  // 19.4.2025
+                { date: new Date(2025, 4, 24, 19, 0), id: 2 },  // 24.5.2025
+                { date: new Date(2025, 5, 13, 19, 0), id: 3 },  // 13.6.2025
+                { date: new Date(2025, 5, 28, 14, 0), id: 4 },  // 28.6.2025
+                { date: new Date(2025, 7, 16, 19, 0), id: 5 },  // 16.8.2025
+                { date: new Date(2025, 7, 21, 19, 30), id: 6 }, // 21.8.2025
+                { date: new Date(2025, 7, 30, 19, 0), id: 7 },  // 30.8.2025
+                { date: new Date(2025, 10, 21, 19, 0), id: 8 }, // 21.11.2025
+                { date: new Date(2025, 10, 29, 19, 0), id: 9 }  // 29.11.2025
+            ];
+            
+            for (let concert of concerts) {
+                if (concert.date > now) {
+                    return concert.id;
+                }
+            }
+            return -1;
+        }
+
+        // Označit následující koncert
+        function markNextConcert() {
+            const nextConcertId = getNextConcert();
+            if (nextConcertId >= 0) {
+                const concertCards = document.querySelectorAll('.concert-card');
+                if (concertCards[nextConcertId]) {
+                    concertCards[nextConcertId].classList.add('next-concert');
+                }
+            } else {
+                const badge = document.querySelector('.next-concert-badge');
+                if (badge) {
+                    badge.style.display = 'none';
+                }
+            }
+        }
+
+        markNextConcert();
+
+        // Funkce pro přepínání stránek
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => button.classList.remove('active'));
+            event.target.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Animace pro galerii
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                alert('Zde by se otevřela fotografie ve velkém náhledu');
+            });
+        });
+
+        // Animace pro play buttony
+        document.querySelectorAll('.play-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const title = this.parentElement.querySelector('.audio-title').textContent;
+                alert('Přehrávání: ' + title + '\n\nZde by se spustilo audio.');
+            });
+        });
+
+        // Animace pro videa
+        document.querySelectorAll('.video-placeholder').forEach(video => {
+            video.addEventListener('click', function() {
+                alert('Zde by se otevřelo video v plné velikosti');
+            });
+        });
+    </script>
+</body>
+</html>
