@@ -1,7 +1,7 @@
-
 // Import Firebase (modulová syntaxe)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore, collection, doc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 // 🔑 Tvoje konfigurace z Firebase Console
 const firebaseConfig = {
@@ -16,6 +16,10 @@ const firebaseConfig = {
 // 🔥 Inicializace Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// 🛡️ Přihlášení anonymně (nutné aby Firestore nebyl zablokovaný)
+const auth = getAuth(app);
+await signInAnonymously(auth);
 
 // 🕒 Začátek návštěvy
 const startTime = Date.now();
@@ -40,7 +44,7 @@ const getBrowserInfo = () => {
   return { browser, os };
 };
 
-// 🕓 Funkce pro hezký formát času
+// 🕓 Hezký formát času
 function formatTime(ts = Date.now()) {
   return new Date(ts).toLocaleString("cs-CZ", {
     timeZone: "Europe/Prague",
@@ -91,7 +95,7 @@ const interval = setInterval(async () => {
   } catch (e) {
     console.error("Error updating Firestore:", e);
   }
-}, 5000); // ← změna z 10 000 na 5 000 ms
+}, 5000);
 
 // 🎁 Událost otevření boxu
 window.addEventListener("openbox", async () => {
