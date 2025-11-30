@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matyl´s APKs</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'></path><polyline points='3.27 6.96 12 12.01 20.73 6.96'></polyline><line x1='12' y1='22.08' x2='12' y2='12'></line></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        },
+                        brand: {
+                            500: '#3b82f6', // Modrá
+                            400: '#60a5fa',
+                            accent: '#10b981', // Zelená pro download
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        /* Glassmorphism efekt pro hlavičku a modály */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            border-color: #3b82f6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .version-row:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+    
+    <nav class="fixed w-full z-50 glass top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <div class="bg-brand-500 p-2 rounded-lg">
+                        <i data-lucide="box" class="text-white w-6 h-6"></i>
+                    </div>
+                    <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-green-400">
+                        Matyl´s APKs
+                    </span>
+                </div>
+
+                <div class="hidden md:block flex-1 max-w-md mx-8">
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="text-gray-400 w-5 h-5 group-focus-within:text-brand-400 transition-colors"></i>
+                        </div>
+                        <input type="text" id="searchInput" 
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-full leading-5 bg-dark-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-dark-700 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 sm:text-sm transition-all"
+                            placeholder="Hledat aplikace a hry...">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a target="_blank" href="https://jujky.com/plan/" class="hover:text-white transition">Máme plán</a>
+                    <!-- ZMĚNA: Přidán onclick -->
+                    <button onclick="openFeedbackModal()" class="bg-brand-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition shadow-lg shadow-blue-500/30">
+                        Feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-12 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-b from-dark-900 to-dark-800">
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-white mb-4 tracking-tight">
+            Objevte nejlepší <span class="text-brand-400">Android</span> aplikace
+        </h1>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+            Moje vlastní aplikace na Android! Stahujte nejnovější, nebo i starší broukovité verze (s bugs).
+        </p>
+
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                <i data-lucide="flame" class="text-orange-500"></i> Všechny aplikace
+            </h2>
+        </div>
+
+        <div id="appGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+    </main>
+
+    <footer class="bg-dark-800 border-t border-gray-800 mt-12 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+            <p>&copy; Matyl 2025. Všechna práva vyhrazena.</p>
+            <div class="mt-4 flex justify-center gap-6">
+                <a target="_blank" href="https://github.com/Matyl2784/" class="hover:text-white transition">GitHub</a>
+                <a target="_blank" href="https://www.instagram.com/matyas_hanus/" class="hover:text-white transition">Instagram</a>
+                <a href="#" onclick="openFeedbackModal(); return false;" class="hover:text-white transition">Kontakt</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modální okno pro detail aplikace -->
+    <div id="appModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-black bg-opacity-70 transition-opacity backdrop-blur-sm" onclick="closeModal()"></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                
+                <div class="relative transform overflow-hidden rounded-2xl bg-dark-800 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-gray-700">
+                    
+                    <div class="bg-dark-900 px-4 py-5 sm:px-6 flex justify-between items-start border-b border-gray-700">
+                        <div class="flex gap-4">
+                            <img id="modalIcon" src="" alt="App Icon" class="h-16 w-16 rounded-2xl shadow-lg bg-gray-700 object-cover">
+                            <div>
+                                <h3 class="text-2xl font-bold leading-6 text-white" id="modalTitle">App Name</h3>
+                                <p class="mt-1 max-w-2xl text-sm text-gray-400" id="modalDev">Developer Name</p>
+                                <div class="mt-2 flex items-center gap-2">
+                                    <span class="px-2 py-0.5 rounded text-xs font-semibold bg-green-900 text-green-300 border border-green-700">Ověřeno</span>
+                                    <span class="text-xs text-gray-500" id="modalSize">45 MB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="text-gray-400 hover:text-white transition bg-dark-700 rounded-full p-1" onclick="closeModal()">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+
+                    <div class="px-4 py-5 sm:p-6">
+                        <p class="text-gray-300 text-sm mb-6 leading-relaxed" id="modalDesc">
+                            Popis aplikace...
+                        </p>
+
+                        <h4 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                            <i data-lucide="history" class="w-5 h-5 text-brand-400"></i> Historie verzí
+                        </h4>
+
+                        <div class="bg-dark-900 rounded-xl border border-gray-700 overflow-hidden" id="versionList">
+                            </div>
+                    </div>
+
+                    <div class="bg-dark-900 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 border-t border-gray-700">
+                        <button type="button" id="modalDownloadBtn" class="inline-flex w-full justify-center rounded-lg bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-500 sm:ml-3 sm:w-auto transition items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Stáhnout nejnovější
+                        </button>
+                        <button type="button" class="mt-3 inline-flex w-full justify-center rounded-lg bg-dark-700 px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm ring-1 ring-inset ring-gray-600 hover:bg-dark-600 sm:mt-0 sm:w-auto transition" onclick="closeModal()">Zavřít</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVÉ: Modální okno pro Feedback/Kontakt -->
+    <div id="feedbackModal" class="fixed inset-0 z-[110] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-black bg-opacity-70 transition-opacity backdrop-blur-sm" onclick="closeFeedbackModal()"></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                
+                <div class="relative transform overflow-hidden rounded-2xl bg-dark-800 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-gray-700">
+                    
+                    <div class="bg-dark-900 px-4 py-5 sm:px-6 flex justify-between items-center border-b border-gray-700">
+                        <h3 class="text-xl font-bold leading-6 text-white flex items-center gap-2">
+                            <i data-lucide="mail" class="w-5 h-5 text-brand-400"></i> Napiš mi!
+                        </h3>
+                        <button type="button" class="text-gray-400 hover:text-white transition bg-dark-700 rounded-full p-1" onclick="closeFeedbackModal()">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+
+                    <form onsubmit="sendFeedback(event)" class="px-4 py-5 sm:p-6 space-y-4">
+                        <div>
+                            <label for="fbEmail" class="block text-sm font-medium text-gray-300 mb-1">Tvůj Email</label>
+                            <input type="email" id="fbEmail" required name="email" class="block w-full px-3 py-2 border border-gray-700 rounded-lg bg-dark-900 text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 sm:text-sm" placeholder="jan@novak.cz">
+                        </div>
+                        <div>
+                            <label for="fbSubject" class="block text-sm font-medium text-gray-300 mb-1">Předmět</label>
+                            <input type="text" id="fbSubject" required name="subject" class="block w-full px-3 py-2 border border-gray-700 rounded-lg bg-dark-900 text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 sm:text-sm" placeholder="Návrh na vylepšení">
+                        </div>
+                        <div>
+                            <label for="fbMessage" class="block text-sm font-medium text-gray-300 mb-1">Zpráva</label>
+                            <textarea id="fbMessage" rows="4" required name="message" class="block w-full px-3 py-2 border border-gray-700 rounded-lg bg-dark-900 text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 sm:text-sm" placeholder="Co máš na srdci..."></textarea>
+                        </div>
+
+                        <div class="pt-2 flex justify-end gap-3">
+                            <button type="button" class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-gray-300 rounded-lg text-sm font-medium transition" onclick="closeFeedbackModal()">Zrušit</button>
+                            <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-medium transition shadow-lg flex items-center gap-2">
+                                <i data-lucide="send" class="w-4 h-4"></i> Odeslat
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-[200]">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <span id="toastMessage">Stahování zahájeno...</span>
+    </div>
+
+    <script>
+        // Inicializace ikon
+        lucide.createIcons();
+
+        // ============================================
+        // NASTAVENÍ ODESÍLÁNÍ EMAILŮ (BEZ OTEVŘENÍ KLIENTA)
+        // ============================================
+        // 1. Jděte na https://formspree.io/ a zaregistrujte se (zdarma).
+        // 2. Vytvořte nový formulář ("New Form") a zadejte svůj email, kam to má chodit.
+        // 3. Zkopírujte vygenerovanou adresu (Endpoint) a vložte ji níže místo "VASE_URL_Z_FORMSPREE":
+        
+        const FORM_ENDPOINT = "https://formspree.io/f/mjkngykj"; 
+        
+        // ============================================
+
+        // Mock Data aplikací (Vaše data)
+        const appsData = [
+            {
+                id: 1,
+                name: "Benál 1.0",
+                developer: "Matyl´s studio",
+                category: "Auto",
+                rating: 4.9,
+                downloads: "1+",
+                icon: "benal_icon.png",
+                desc: "Nejlepší aplikace pro zaznamenávání ujetých kilometrů a projetého benzínu včetně ceny v Kč!",
+                versions: [
+                    { ver: "1.2", date: "30.11.2025", size: "15,3 MB", type: "stable", fileName: "app-benal-v1.2.apk" },
+                    { ver: "1.1", date: "23.11.2025", size: "15,3 MB", type: "old", fileName: "app-benal-v1.1.apk" },
+                    { ver: "1.0", date: "22.11.2025", size: "15,3 MB", type: "old", fileName: "app-benal-v1.0.apk" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Máme Plán",
+                developer: "Matyl´s studio",
+                category: "Fun",
+                rating: 4.7,
+                downloads: "1+",
+                icon: "plan_icon.jpg",
+                desc: "Jediná aplikace, která z vašeho mobilu udělá cedulku MÁME PLÁN!",
+                versions: [
+                    { ver: "1.0", date: "20.11.2025", size: "6,9 MB", type: "stable", fileName: "app-plan-v1.0.apk" },
+                ]
+            },
+            {
+                id: 3,
+                name: "Jimbíček",
+                developer: "Matyl",
+                category: "Fun / Counter",
+                rating: 4.2,
+                downloads: "2+",
+                icon: "jimb_icon.jpg",
+                desc: "S touto aplikací se vám nikdy nestane, že se budete nudit!",
+                versions: [
+                    { ver: "1.0.1", date: "5.7.2025", size: "89,17 MB", type: "stable", fileName: "app-jimb-v1.0.1.apk" },
+                ]
+            }
+        ];
+
+        // Vykreslení gridu
+        function renderApps(apps) {
+            const grid = document.getElementById('appGrid');
+            grid.innerHTML = '';
+
+            apps.forEach(app => {
+                const latestVer = app.versions[0];
+                const card = document.createElement('div');
+                card.className = 'bg-dark-800 rounded-xl p-5 border border-gray-700 shadow-lg card-hover flex flex-col h-full';
+                
+                card.innerHTML = `
+                    <div class="flex items-start justify-between mb-4">
+                        <img src="${app.icon}" alt="${app.name}" onerror="this.src='https://placehold.co/100/334155/white?text=N/A'" class="w-16 h-16 rounded-2xl shadow-md bg-dark-700 object-cover">
+                        <span class="bg-dark-700 text-xs font-medium px-2 py-1 rounded text-gray-300 border border-gray-600">${app.category}</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1 truncate">${app.name}</h3>
+                    <p class="text-sm text-gray-400 mb-4">${app.developer}</p>
+                    
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mb-6">
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-yellow-500"></i>
+                            <span class="text-gray-300">${app.rating}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="download-cloud" class="w-3 h-3"></i>
+                            <span>${app.downloads}</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="tag" class="w-3 h-3"></i>
+                            <span class="text-brand-400">${latestVer.ver}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto grid grid-cols-2 gap-3">
+                        <button onclick="openModal(${app.id})" class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-white text-sm font-medium rounded-lg transition border border-gray-600">
+                            Detaily
+                        </button>
+                        <button onclick="downloadApk('${latestVer.fileName || 'app.apk'}')" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium rounded-lg transition shadow-lg shadow-blue-900/20 flex justify-center items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> APK
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Logika Modálu pro Aplikace
+        function openModal(appId) {
+            const app = appsData.find(a => a.id === appId);
+            if (!app) return;
+
+            document.getElementById('modalTitle').textContent = app.name;
+            document.getElementById('modalDev').textContent = app.developer;
+            document.getElementById('modalDesc').textContent = app.desc;
+            document.getElementById('modalIcon').src = app.icon;
+            document.getElementById('modalSize').textContent = app.versions[0].size;
+            
+            const mainDownloadBtn = document.getElementById('modalDownloadBtn');
+            if(mainDownloadBtn) {
+                 mainDownloadBtn.onclick = function() {
+                    downloadApk(app.versions[0].fileName || 'app.apk');
+                };
+            }
+
+            const verList = document.getElementById('versionList');
+            verList.innerHTML = '';
+
+            app.versions.forEach(ver => {
+                const row = document.createElement('div');
+                row.className = 'version-row flex items-center justify-between p-4 border-b border-gray-700 bg-dark-800 hover:bg-dark-700 transition';
+                
+                let badgeClass = 'bg-gray-700 text-gray-300';
+                if(ver.type === 'stable') badgeClass = 'bg-green-900 text-green-300 border border-green-700';
+                if(ver.type === 'beta') badgeClass = 'bg-yellow-900 text-yellow-300 border border-yellow-700';
+
+                row.innerHTML = `
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-white text-lg">${ver.ver}</span>
+                            <span class="text-xs px-2 py-0.5 rounded ${badgeClass}">${ver.type.toUpperCase()}</span>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1">${ver.date} • ${ver.size}</span>
+                    </div>
+                    <button onclick="downloadApk('${ver.fileName || 'app.apk'}')" class="p-2 bg-dark-600 hover:bg-brand-600 rounded-lg text-white transition group">
+                        <i data-lucide="download" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                    </button>
+                `;
+                verList.appendChild(row);
+            });
+            lucide.createIcons();
+            document.getElementById('appModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('appModal').classList.add('hidden');
+        }
+
+        // ==========================================
+        // LOGIKA PRO FEEDBACK (NOVÁ - AJAX)
+        // ==========================================
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('hidden');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.add('hidden');
+        }
+
+        async function sendFeedback(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('fbEmail').value;
+            const subject = document.getElementById('fbSubject').value;
+            const message = document.getElementById('fbMessage').value;
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+
+            // Kontrola, zda uživatel nastavil URL
+            if (FORM_ENDPOINT.includes("VASE_URL_Z_FORMSPREE")) {
+                alert("CHYBA: Nejdříve musíte v kódu nastavit svou Formspree URL (řádek cca 280).");
+                return;
+            }
+
+            // Změna tlačítka na "Odesílám..."
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Odesílám...';
+            lucide.createIcons();
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(FORM_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        subject: subject,
+                        message: message,
+                        _subject: `Nový feedback z APK Store: ${subject}`
+                    })
+                });
+
+                if (response.ok) {
+                    closeFeedbackModal();
+                    showToast("Zpráva byla úspěšně odeslána!");
+                    
+                    // Vymazání formuláře
+                    document.getElementById('fbEmail').value = '';
+                    document.getElementById('fbSubject').value = '';
+                    document.getElementById('fbMessage').value = '';
+                } else {
+                    const data = await response.json();
+                    if (Object.hasOwn(data, 'errors')) {
+                        showToast("Chyba: " + data["errors"].map(error => error["message"]).join(", "));
+                    } else {
+                        showToast("Chyba při odesílání.");
+                    }
+                }
+            } catch (error) {
+                showToast("Chyba připojení. Zkuste to později.");
+                console.error(error);
+            } finally {
+                // Vrácení tlačítka
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+        // ==========================================
+
+        // Funkce pro stažení
+        function downloadApk(fileName) {
+            showToast("Stahování zahájeno...");
+            const link = document.createElement('a');
+            link.href = fileName; 
+            link.download = fileName; 
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Search Filtr
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = appsData.filter(app => 
+                app.name.toLowerCase().includes(term) || 
+                app.category.toLowerCase().includes(term)
+            );
+            renderApps(filtered);
+        });
+
+        // Klávesa ESC zavírá vše
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeFeedbackModal();
+            }
+        });
+
+        // První vykreslení
+        renderApps(appsData);
+
+    </script>
+</body>
+</html>
