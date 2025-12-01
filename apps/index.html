@@ -74,10 +74,44 @@
         .version-row:last-child {
             border-bottom: none;
         }
+
+        /* Animace pro hrající hudbu */
+        @keyframes pulse-music {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .music-playing {
+            animation: pulse-music 2s infinite;
+            color: #60a5fa; /* brand-400 */
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
     
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        <source src="music.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- NOVÉ: Vstupní "Trap" Overlay -->
+    <div id="entryModal" class="fixed inset-0 z-[300] bg-dark-900 flex flex-col items-center justify-center text-center p-4 transition-opacity duration-700">
+        <div class="bg-dark-800 p-8 rounded-2xl border border-gray-700 shadow-2xl max-w-sm w-full relative overflow-hidden">
+            <!-- Dekorace v pozadí -->
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-500 to-brand-accent"></div>
+            
+            <i data-lucide="music" class="w-12 h-12 text-brand-500 mx-auto mb-6"></i>
+            
+            <h2 class="text-2xl font-bold text-white mb-2">Vítej!</h2>
+            <p class="text-gray-400 mb-8 text-sm">Pro přístup k exkluzivnímu obsahu a sušenkám prosím potvrď vstup.</p>
+            
+            <button onclick="enterSite()" class="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition transform hover:scale-105 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2 group">
+                <span>VSTOUPIT</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </div>
+    </div>
+
     <nav class="fixed w-full z-50 glass top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
@@ -102,8 +136,12 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <a target="_blank" href="https://jujky.com/plan/" class="hover:text-white transition">Máme plán</a>
-                    <!-- ZMĚNA: Přidán onclick -->
+                    <!-- Tlačítko pro hudbu -->
+                    <button onclick="toggleMusic()" class="p-2 rounded-full bg-dark-800 text-gray-400 hover:text-white border border-gray-700 hover:border-brand-500 transition mr-2" title="Hudba">
+                        <i id="musicIcon" data-lucide="music" class="w-5 h-5"></i>
+                    </button>
+
+                    <a target="_blank" href="https://jujky.com/plan/" class="hover:text-white transition hidden sm:block">Máme plán</a>
                     <button onclick="openFeedbackModal()" class="bg-brand-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition shadow-lg shadow-blue-500/30">
                         Feedback
                     </button>
@@ -194,7 +232,7 @@
         </div>
     </div>
 
-    <!-- NOVÉ: Modální okno pro Feedback/Kontakt -->
+    <!-- Modální okno pro Feedback/Kontakt -->
     <div id="feedbackModal" class="fixed inset-0 z-[110] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black bg-opacity-70 transition-opacity backdrop-blur-sm" onclick="closeFeedbackModal()"></div>
 
@@ -248,14 +286,9 @@
         lucide.createIcons();
 
         // ============================================
-        // NASTAVENÍ ODESÍLÁNÍ EMAILŮ (BEZ OTEVŘENÍ KLIENTA)
+        // ODESÍLÁNÍ FORMULÁŘE
         // ============================================
-        // 1. Jděte na https://formspree.io/ a zaregistrujte se (zdarma).
-        // 2. Vytvořte nový formulář ("New Form") a zadejte svůj email, kam to má chodit.
-        // 3. Zkopírujte vygenerovanou adresu (Endpoint) a vložte ji níže místo "VASE_URL_Z_FORMSPREE":
-        
         const FORM_ENDPOINT = "https://formspree.io/f/mjkngykj"; 
-        
         // ============================================
 
         // Mock Data aplikací (Vaše data)
@@ -270,9 +303,9 @@
                 icon: "benal_icon.png",
                 desc: "Nejlepší aplikace pro zaznamenávání ujetých kilometrů a projetého benzínu včetně ceny v Kč!",
                 versions: [
-                    { ver: "1.2", date: "30.11.2025", size: "15,3 MB", type: "stable", fileName: "https://github.com/Matyl2784/Matyl2784.github.io/releases/download/apps/app-benal-v1.2.apk" },
-                    { ver: "1.1", date: "23.11.2025", size: "15,3 MB", type: "old", fileName: "https://github.com/Matyl2784/Matyl2784.github.io/releases/download/apps/app-benal-v1.1.apk" },
-                    { ver: "1.0", date: "22.11.2025", size: "15,3 MB", type: "old", fileName: "https://github.com/Matyl2784/Matyl2784.github.io/releases/download/apps/app-benal-v1.0.apk" }
+                    { ver: "1.2", date: "30.11.2025", size: "15,3 MB", type: "stable", fileName: "app-benal-v1.2.apk" },
+                    { ver: "1.1", date: "23.11.2025", size: "15,3 MB", type: "old", fileName: "app-benal-v1.1.apk" },
+                    { ver: "1.0", date: "22.11.2025", size: "15,3 MB", type: "old", fileName: "app-benal-v1.0.apk" }
                 ]
             },
             {
@@ -283,9 +316,9 @@
                 rating: 4.7,
                 downloads: "1+",
                 icon: "plan_icon.jpg",
-                desc: "Jediná apka, která z vašeho mobilu udělá cedulku MÁME PLÁN!",
+                desc: "Jediná aplikace, která z vašeho mobilu udělá cedulku MÁME PLÁN!",
                 versions: [
-                    { ver: "1.0", date: "20.11.2025", size: "6,9 MB", type: "stable", fileName: "https://github.com/Matyl2784/Matyl2784.github.io/releases/download/apps/app-plan-v1.0.apk" },
+                    { ver: "1.0", date: "20.11.2025", size: "6,9 MB", type: "stable", fileName: "app-plan-v1.0.apk" },
                 ]
             },
             {
@@ -298,7 +331,7 @@
                 icon: "jimb_icon.jpg",
                 desc: "S touto aplikací se vám nikdy nestane, že se budete nudit!",
                 versions: [
-                    { ver: "1.0.1", date: "5.7.2025", size: "89,17 MB", type: "stable", fileName: "https://github.com/Matyl2784/Matyl2784.github.io/releases/download/apps/app-jimb-v1.0.1.apk" },
+                    { ver: "1.0.1", date: "5.7.2025", size: "89,17 MB", type: "stable", fileName: "app-jimb-v1.0.1.apk" },
                 ]
             }
         ];
@@ -402,7 +435,59 @@
         }
 
         // ==========================================
-        // LOGIKA PRO FEEDBACK (NOVÁ - AJAX)
+        // VSTUPNÍ TRAP A HUDBA
+        // ==========================================
+        function enterSite() {
+            const modal = document.getElementById('entryModal');
+            const audio = document.getElementById('bgMusic');
+            
+            // Nastavení hlasitosti (aby to nebylo moc nahlas)
+            audio.volume = 0.3;
+            
+            // Spuštění hudby (v reakci na kliknutí to prohlížeč povolí)
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    console.log("Audio hraje");
+                    updateMusicIcon(true);
+                }).catch(error => {
+                    console.log("Audio blokováno:", error);
+                });
+            }
+
+            // Animace zmizení modálu
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            // Úplné odstranění z DOM po animaci
+            setTimeout(() => {
+                modal.remove();
+            }, 700);
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            if (audio.paused) {
+                audio.play();
+                updateMusicIcon(true);
+            } else {
+                audio.pause();
+                updateMusicIcon(false);
+            }
+        }
+
+        function updateMusicIcon(isPlaying) {
+            const icon = document.getElementById('musicIcon');
+            if (isPlaying) {
+                icon.setAttribute('data-lucide', 'pause');
+                icon.classList.add('music-playing');
+            } else {
+                icon.setAttribute('data-lucide', 'music');
+                icon.classList.remove('music-playing');
+            }
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // FEEDBACK
         // ==========================================
         function openFeedbackModal() {
             document.getElementById('feedbackModal').classList.remove('hidden');
@@ -422,13 +507,11 @@
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
 
-            // Kontrola, zda uživatel nastavil URL
             if (FORM_ENDPOINT.includes("VASE_URL_Z_FORMSPREE")) {
-                alert("CHYBA: Nejdříve musíte v kódu nastavit svou Formspree URL (řádek cca 280).");
+                alert("CHYBA: Nejdříve musíte v kódu nastavit svou Formspree URL.");
                 return;
             }
 
-            // Změna tlačítka na "Odesílám..."
             submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Odesílám...';
             lucide.createIcons();
             submitBtn.disabled = true;
@@ -451,8 +534,6 @@
                 if (response.ok) {
                     closeFeedbackModal();
                     showToast("Zpráva byla úspěšně odeslána!");
-                    
-                    // Vymazání formuláře
                     document.getElementById('fbEmail').value = '';
                     document.getElementById('fbSubject').value = '';
                     document.getElementById('fbMessage').value = '';
@@ -465,18 +546,15 @@
                     }
                 }
             } catch (error) {
-                showToast("Chyba připojení. Zkuste to později.");
+                showToast("Chyba připojení.");
                 console.error(error);
             } finally {
-                // Vrácení tlačítka
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
                 lucide.createIcons();
             }
         }
-        // ==========================================
 
-        // Funkce pro stažení
         function downloadApk(fileName) {
             showToast("Stahování zahájeno...");
             const link = document.createElement('a');
@@ -496,7 +574,6 @@
             }, 3000);
         }
 
-        // Search Filtr
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = appsData.filter(app => 
@@ -506,7 +583,6 @@
             renderApps(filtered);
         });
 
-        // Klávesa ESC zavírá vše
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
@@ -514,11 +590,8 @@
             }
         });
 
-        // První vykreslení
         renderApps(appsData);
 
     </script>
-    <script type="module" src="log.js"></script>
-
 </body>
 </html>
