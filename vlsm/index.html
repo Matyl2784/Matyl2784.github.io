@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv4 Subnetting Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --accent: #06b6d4;
+            --accent-light: #22d3ee;
+            --background: #ffffff;
+            --foreground: #1f2937;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --muted: #f3f4f6;
+            --muted-foreground: #6b7280;
+            --success: #10b981;
+            --error: #ef4444;
+            --radius: 0.65rem;
+        }
+
+        body.dark {
+            --background: #0f172a;
+            --foreground: #e2e8f0;
+            --card: #1e293b;
+            --border: #334155;
+            --muted: #1e293b;
+            --muted-foreground: #94a3b8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            background-color: var(--card);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.5rem 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: rgba(6, 182, 212, 0.1);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        .header-text p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .theme-toggle {
+            background-color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem 0;
+            padding-bottom: 6rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--foreground);
+        }
+
+        .card-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.75rem;
+            height: 1.75rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--foreground);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+            background-color: var(--card);
+            color: var(--foreground);
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+
+        input[type="text"].valid {
+            border-color: var(--success);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        input[type="text"].invalid {
+            border-color: var(--error);
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        .validation-message {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .validation-message.valid {
+            color: var(--success);
+        }
+
+        .validation-message.invalid {
+            color: var(--error);
+        }
+
+        .format-examples {
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .format-examples strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--foreground);
+        }
+
+        .format-examples ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .format-examples li {
+            padding: 0.25rem 0;
+        }
+
+        .format-examples li:before {
+            content: "• ";
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .segment-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            align-items: flex-end;
+        }
+
+        .segment-item input {
+            flex: 1;
+        }
+
+        .segment-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            font-weight: 500;
+            min-width: 3rem;
+        }
+
+        button {
+            padding: 0.625rem 1rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            width: 100%;
+            padding: 0.75rem 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-light);
+            box-shadow: 0 4px 6px rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--foreground);
+            border: 1px solid var(--border);
+            padding: 0.625rem 1rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--muted);
+        }
+
+        .btn-small {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            background-color: var(--error);
+            color: white;
+            border: none;
+        }
+
+        .btn-small:hover {
+            background-color: #dc2626;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--muted-foreground);
+        }
+
+        .empty-state p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-container.visible {
+            display: block;
+        }
+
+        .results-header {
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-header h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--muted-foreground);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .results-header .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-stat {
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .results-stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted-foreground);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .results-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sort-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            background-color: var(--muted);
+            color: var(--foreground);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sort-btn.active {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .sort-btn:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        thead {
+            background-color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--foreground);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:hover {
+            background-color: var(--muted);
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--accent-light);
+        }
+
+        .copy-btn.copied {
+            color: var(--success);
+        }
+
+        .info-text {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-top: 0.25rem;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 1px solid var(--border);
+            background-color: var(--card);
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 5rem;
+            right: 1rem;
+            background-color: var(--success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.hide {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+
+        @keyframes slideOut {
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .add-segment-btn {
+            width: 100%;
+            background-color: transparent;
+            border: 2px dashed var(--border);
+            color: var(--accent);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .add-segment-btn:hover {
+            border-color: var(--accent);
+            background-color: rgba(6, 182, 212, 0.05);
+        }
+
+        .legend {
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .legend-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .legend-label {
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .legend-desc {
+            color: var(--muted-foreground);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; min-height: 100vh;">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-left">
+                        <div class="header-icon">🌐</div>
+                        <div class="header-text">
+                            <h1>IPv4 Subnetting Calculator</h1>
+                            <p>VLSM-based subnet allocation tool</p>
+                        </div>
+                    </div>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
+                <div class="grid">
+                    <!-- Input Section -->
+                    <div>
+                        <div class="card">
+                            <h2>
+                                <span class="card-number">1</span>
+                                Base Network
+                            </h2>
+
+                            <div class="form-group">
+                                <label for="network">Network Address (CIDR)</label>
+                                <input 
+                                    type="text" 
+                                    id="network" 
+                                    placeholder="192.168.10.0/24"
+                                    value="192.168.10.0/24"
+                                >
+                                <div class="validation-message" id="networkValidation"></div>
+                            </div>
+
+                            <div class="format-examples">
+                                <strong>Format Examples:</strong>
+                                <ul>
+                                    <li>10.0.0.0/8 (Class A)</li>
+                                    <li>172.16.0.0/12 (Class B)</li>
+                                    <li>192.168.0.0/16 (Class C)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top: 1.5rem;">
+                            <h2>
+                                <span class="card-number">2</span>
+                                Network Segments
+                            </h2>
+
+                            <div id="segmentsList"></div>
+
+                            <button class="add-segment-btn" id="addSegmentBtn">
+                                + Add Segment
+                            </button>
+                        </div>
+
+                        <div class="button-group" style="margin-top: 1.5rem;">
+                            <button class="btn-primary" id="calculateBtn">Calculate Subnets</button>
+                            <button class="btn-secondary" id="resetBtn">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div>
+                        <div class="card">
+                            <div class="results-container" id="resultsContainer">
+                                <div class="results-header">
+                                    <h3>Base Network</h3>
+                                    <div class="value" id="baseNetworkDisplay"></div>
+                                </div>
+
+                                <div class="results-grid">
+                                    <div class="results-stat">
+                                        <div class="results-stat-label">Total IPs</div>
+                                        <div class="results-stat-value" id="totalIpsDisplay">0</div>
+                                    </div>
+                                    <div class="results-stat">
+                                        <div class="results-stat-label">Used IPs</div>
+                                        <div class="results-stat-value" id="usedIpsDisplay">0</div>
+                                    </div>
+                                    <div class="results-stat">
+                                        <div class="results-stat-label">Utilization</div>
+                                        <div class="results-stat-value" id="utilizationDisplay">0%</div>
+                                    </div>
+                                </div>
+
+                                <div class="legend">
+                                    <div class="legend-item">
+                                        <span class="legend-label">IPS:</span>
+                                        <span class="legend-desc">Internet Protocol Subnets - počet IP adres v podsíti</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-label">Wildcard:</span>
+                                        <span class="legend-desc">Inverzní maska - určuje, které bity se mohou měnit</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-label">Broadcast:</span>
+                                        <span class="legend-desc">Poslední adresa v podsíti - určena pro rozeslání všem zařízením</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-label">Network:</span>
+                                        <span class="legend-desc">První adresa v podsíti - identifikuje celou podsíť</span>
+                                    </div>
+                                </div>
+
+                                <div class="sort-controls">
+                                    <button class="sort-btn active" onclick="sortResults('original')">Původní pořadí</button>
+                                    <button class="sort-btn" onclick="sortResults('size')">Seřadit podle velikosti</button>
+                                </div>
+
+                                <div class="table-wrapper">
+                                    <table id="resultsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Seg</th>
+                                                <th>Users</th>
+                                                <th>Network</th>
+                                                <th>Broadcast</th>
+                                                <th>Subnet Mask</th>
+                                                <th>Wildcard</th>
+                                                <th>IPS</th>
+                                                <th>Max Users</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="resultsTableBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="results-grid">
+                                    <div class="results-stat">
+                                        <div class="results-stat-label">Total Subnets</div>
+                                        <div class="results-stat-value" id="totalSubnetsDisplay">0</div>
+                                    </div>
+                                    <div class="results-stat">
+                                        <div class="results-stat-label">Total Usable IPs</div>
+                                        <div class="results-stat-value" id="totalUsableIpsDisplay">0</div>
+                                    </div>
+                                    <div class="results-stat">
+                                        <div class="results-stat-label">Unused IPs</div>
+                                        <div class="results-stat-value" id="unusedIpsDisplay">0</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="emptyState" class="empty-state">
+                                <div class="empty-state-icon">📊</div>
+                                <h3>No Results Yet</h3>
+                                <p>Enter a base network and add segments to calculate subnet allocation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p class="footer-text">
+                    IPv4 Subnetting Calculator • Uses VLSM (Variable Length Subnet Mask) algorithm. Vytvořil papyrusftw & Matyl, spolupracoval ManusAI.<br>
+                    © Matyl 2025. Všechna práva vyhrazena.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        
+        if (isDarkMode) {
+            document.body.classList.add('dark');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        });
+
+        // Helper to handle 32-bit unsigned integer operations
+        function u32(n) {
+            return n >>> 0;
+        }
+
+        function IPtoINT(ip) {
+            const parts = ip.split(".");
+            const a = u32(parseInt(parts[0]) << 24);
+            const b = u32(parseInt(parts[1]) << 16);
+            const c = u32(parseInt(parts[2]) << 8);
+            const d = parseInt(parts[3]);
+            return u32(a + b + c + d);
+        }
+
+        function INTtoIP(num) {
+            num = u32(num);
+            const a = (num >>> 24) & 0xFF;
+            const b = (num >>> 16) & 0xFF;
+            const c = (num >>> 8) & 0xFF;
+            const d = num & 0xFF;
+            return `${a}.${b}.${c}.${d}`;
+        }
+
+        function getWildcard(cidr) {
+            let mask = 0;
+            if (cidr === 32) {
+                mask = 0;
+            } else if (cidr === 0) {
+                mask = 0xFFFFFFFF;
+            } else {
+                mask = u32(~(0xFFFFFFFF << (32 - cidr)));
+            }
+            const a = (mask >>> 24) & 0xFF;
+            const b = (mask >>> 16) & 0xFF;
+            const c = (mask >>> 8) & 0xFF;
+            const d = mask & 0xFF;
+            return `${a}.${b}.${c}.${d}`;
+        }
+
+        function CalcSubnetInfo(users) {
+            const TotalNeeded = users + 2;
+            let SubnetSize = 1;
+            while (SubnetSize < TotalNeeded) {
+                SubnetSize *= 2;
+            }
+            let cidr = 32;
+            let size = SubnetSize;
+            while (size > 1) {
+                size >>= 1;
+                cidr -= 1;
+            }
+            if (users === 2 && cidr !== 30) {
+                cidr = 30;
+                SubnetSize = 4;
+            }
+            
+            let mask = 0;
+            if (cidr === 0) {
+                mask = 0;
+            } else if (cidr === 32) {
+                mask = 0xFFFFFFFF;
+            } else {
+                mask = u32(0xFFFFFFFF << (32 - cidr));
+            }
+            
+            const MaskOctets = [
+                (mask >>> 24) & 0xFF,
+                (mask >>> 16) & 0xFF,
+                (mask >>> 8) & 0xFF,
+                mask & 0xFF
+            ];
+            const maskstr = `${MaskOctets[0]}.${MaskOctets[1]}.${MaskOctets[2]}.${MaskOctets[3]}`;
+            return {
+                size: SubnetSize,
+                cidr: cidr,
+                maskstr: maskstr,
+                usable: SubnetSize - 2
+            };
+        }
+
+        function AllocateSubnets(BaseNetwork, segments) {
+            const SegsWithIndexes = segments.map((users, i) => [i, users]);
+            const SegsSorted = [...SegsWithIndexes].sort((a, b) => b[1] - a[1]);
+
+            const subnets = [];
+            let currentip = u32(BaseNetwork.NetworkInt);
+            const maxip = u32(BaseNetwork.BroadcastInt);
+
+            for (const [OgIndex, users] of SegsSorted) {
+                let SubnetInfo = CalcSubnetInfo(users);
+                if (users <= 2 && SubnetInfo.size < 4) {
+                    SubnetInfo.size = 4;
+                    SubnetInfo.cidr = 30;
+                    SubnetInfo.usable = 2;
+                }
+                
+                const endIp = u32(currentip + SubnetInfo.size - 1);
+                if (endIp > maxip) {
+                    return null;
+                }
+                
+                const NetworkInt = u32(currentip);
+                const BroadcastInt = u32(currentip + SubnetInfo.size - 1);
+                const FirstUsable = SubnetInfo.size > 2 ? u32(NetworkInt + 1) : null;
+                const LastUsable = SubnetInfo.size > 2 ? u32(BroadcastInt - 1) : null;
+                
+                subnets.push({
+                    OgIndex: OgIndex,
+                    users: users,
+                    network: INTtoIP(NetworkInt),
+                    broadcast: INTtoIP(BroadcastInt),
+                    cidr: SubnetInfo.cidr,
+                    mask: SubnetInfo.maskstr,
+                    wildcard: getWildcard(SubnetInfo.cidr),
+                    size: SubnetInfo.size,
+                    usable: SubnetInfo.usable,
+                    FirstUsable: FirstUsable ? INTtoIP(FirstUsable) : "N/A",
+                    LastUsable: LastUsable ? INTtoIP(LastUsable) : "N/A"
+                });
+                currentip = u32(currentip + SubnetInfo.size);
+            }
+            return subnets;
+        }
+
+        // UI Functions
+        const segments = [10, 20, 5];
+        const networkInput = document.getElementById('network');
+        const segmentsList = document.getElementById('segmentsList');
+        const addSegmentBtn = document.getElementById('addSegmentBtn');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const emptyState = document.getElementById('emptyState');
+        let currentSortMode = 'original';
+        let currentSubnets = [];
+
+        function renderSegments() {
+            segmentsList.innerHTML = '';
+            segments.forEach((users, index) => {
+                const div = document.createElement('div');
+                div.className = 'segment-item';
+                div.innerHTML = `
+                    <span class="segment-label">Seg ${index + 1}</span>
+                    <input type="number" value="${users}" min="1" max="65534" 
+                        onchange="segments[${index}] = parseInt(this.value) || 0; validateForm();">
+                    <button class="btn-small" onclick="removeSegment(${index})">X</button>
+                `;
+                segmentsList.appendChild(div);
+            });
+            validateForm();
+        }
+
+        function removeSegment(index) {
+            segments.splice(index, 1);
+            renderSegments();
+        }
+
+        function addSegment() {
+            segments.push(1);
+            renderSegments();
+        }
+
+        function validateNetwork() {
+            const value = networkInput.value.trim();
+            const validation = document.getElementById('networkValidation');
+            
+            if (!value) {
+                networkInput.className = '';
+                validation.innerHTML = '';
+                return false;
+            }
+
+            try {
+                const [IPpart, CIDRpart] = value.split('/');
+                const cidr = parseInt(CIDRpart);
+                
+                if (cidr < 0 || cidr > 32) {
+                    throw new Error('CIDR must be between 0 and 32');
+                }
+                
+                const IPparts = IPpart.split('.');
+                if (IPparts.length !== 4) {
+                    throw new Error('Invalid IP address format');
+                }
+                
+                for (const part of IPparts) {
+                    const num = parseInt(part);
+                    if (isNaN(num) || num < 0 || num > 255) {
+                        throw new Error('IP parts must be between 0 and 255');
+                    }
+                }
+
+                networkInput.className = 'valid';
+                validation.className = 'validation-message valid';
+                validation.innerHTML = '✓ Valid network address';
+                return true;
+            } catch (e) {
+                networkInput.className = 'invalid';
+                validation.className = 'validation-message invalid';
+                validation.innerHTML = '✗ ' + e.message;
+                return false;
+            }
+        }
+
+        function validateForm() {
+            const isNetworkValid = validateNetwork();
+            const hasSegments = segments.length > 0 && segments.some(s => s > 0);
+            calculateBtn.disabled = !(isNetworkValid && hasSegments);
+        }
+
+        function getNetworkInfo() {
+            const [IPpart, CIDRpart] = networkInput.value.split('/');
+            const cidr = parseInt(CIDRpart);
+            const ipint = IPtoINT(IPpart);
+            
+            let mask = 0;
+            if (cidr === 0) {
+                mask = 0;
+            } else if (cidr === 32) {
+                mask = 0xFFFFFFFF;
+            } else {
+                mask = u32(0xFFFFFFFF << (32 - cidr));
+            }
+            
+            const NetworkInt = u32(ipint & mask);
+            const BroadcastInt = u32(NetworkInt + (1 << (32 - cidr)) - 1);
+            
+            return {
+                address: INTtoIP(NetworkInt),
+                cidr: cidr,
+                NetworkInt: NetworkInt,
+                BroadcastInt: BroadcastInt
+            };
+        }
+
+        function calculate() {
+            const BaseNetwork = getNetworkInfo();
+            const validSegments = segments.filter(s => s > 0);
+            
+            if (validSegments.length === 0) {
+                showToast('Please add at least one segment');
+                return;
+            }
+
+            const subnets = AllocateSubnets(BaseNetwork, validSegments);
+            
+            if (!subnets) {
+                showToast('Not enough IP space for the given segments', 'error');
+                return;
+            }
+
+            currentSubnets = subnets;
+            displayResults(BaseNetwork, subnets);
+        }
+
+        function sortResults(mode) {
+            currentSortMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            let sortedSubnets = [...currentSubnets];
+            if (mode === 'size') {
+                sortedSubnets.sort((a, b) => b.size - a.size);
+            } else {
+                sortedSubnets.sort((a, b) => a.OgIndex - b.OgIndex);
+            }
+
+            updateTable(sortedSubnets);
+        }
+
+        function updateTable(subnets) {
+            const tbody = document.getElementById('resultsTableBody');
+            tbody.innerHTML = '';
+            
+            subnets.forEach((subnet, i) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${subnet.OgIndex + 1}</td>
+                    <td>${subnet.users}</td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${subnet.network}')">${subnet.network}</button></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${subnet.broadcast}')">${subnet.broadcast}</button></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${subnet.mask}')">${subnet.mask}</button></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${subnet.wildcard}')">${subnet.wildcard}</button></td>
+                    <td>${subnet.size}</td>
+                    <td>${subnet.usable}</td>
+                `;
+            });
+        }
+
+        function displayResults(BaseNetwork, subnets) {
+            document.getElementById('baseNetworkDisplay').textContent = 
+                `${BaseNetwork.address}/${BaseNetwork.cidr}`;
+            
+            const totalIPs = u32(BaseNetwork.BroadcastInt - BaseNetwork.NetworkInt + 1);
+            const usedIPs = subnets.reduce((sum, s) => sum + s.size, 0);
+            const utilization = Math.round((usedIPs / totalIPs) * 100);
+
+            document.getElementById('totalIpsDisplay').textContent = totalIPs;
+            document.getElementById('usedIpsDisplay').textContent = usedIPs;
+            document.getElementById('utilizationDisplay').textContent = utilization + '%';
+
+            // Reset sort to original
+            currentSortMode = 'original';
+            document.querySelectorAll('.sort-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === 0);
+            });
+
+            subnets.sort((a, b) => a.OgIndex - b.OgIndex);
+            updateTable(subnets);
+
+            const totalUsableIPs = subnets.reduce((sum, s) => sum + (s.usable > 0 ? s.usable : 0), 0);
+            const unusedIPs = u32(totalIPs - usedIPs);
+
+            document.getElementById('totalSubnetsDisplay').textContent = subnets.length;
+            document.getElementById('totalUsableIpsDisplay').textContent = totalUsableIPs;
+            document.getElementById('unusedIpsDisplay').textContent = unusedIPs;
+
+            resultsContainer.classList.add('visible');
+            emptyState.style.display = 'none';
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!');
+            });
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        function reset() {
+            networkInput.value = '192.168.10.0/24';
+            segments.length = 0;
+            segments.push(10, 20, 5);
+            renderSegments();
+            resultsContainer.classList.remove('visible');
+            emptyState.style.display = 'block';
+            validateForm();
+        }
+
+        // Event Listeners
+        networkInput.addEventListener('input', validateForm);
+        addSegmentBtn.addEventListener('click', addSegment);
+        calculateBtn.addEventListener('click', calculate);
+        resetBtn.addEventListener('click', reset);
+
+        // Initialize
+        renderSegments();
+    </script>
+</body>
+</html>
