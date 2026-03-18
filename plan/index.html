@@ -19,13 +19,13 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #000; /* Černé pozadí, aby nebyl vidět obsah */
+      background-color: #000;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 9999; /* Musí být nad vším ostatním */
-      transition: opacity 0.8s ease-out; /* Efekt zmizení */
+      z-index: 9999;
+      transition: opacity 0.8s ease-out;
       color: white;
       text-align: center;
     }
@@ -67,11 +67,11 @@
       overflow: hidden;
     }
 
-    /* obrázek pokryje obrazovku (crop při zachování poměru stran) */
+    /* obrázek se přizpůsobí obrazovce bez oříznutí */
     .full img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* cover = vyplní obrazovku */
+      object-fit: contain; /* ZMĚNĚNO: 'contain' místo 'cover' */
       display: block;
       user-select: none;
       -webkit-user-drag: none;
@@ -88,47 +88,37 @@
       background: rgba(0,0,0,0.35);
       padding: 6px 8px;
       border-radius: 6px;
-      pointer-events: none; /* Aby se nedalo kliknout na text místo odkazu */
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. Startovací obrazovka -->
   <div id="intro-overlay">
     <h1>Máš plán?</h1>
     <button id="enter-btn">ANO!</button>
   </div>
 
-  <!-- 2. Audio element (skrytý) -->
-  <!-- 'loop' zajistí opakování hudby -->
   <audio id="bg-music" src="plan.mp3" loop></audio>
 
-  <!-- 3. Hlavní obsah (Původní kód) -->
-  <a class="full" href="app-plan1.apk" download>
-    <!-- Pokud nemáš obrázek, použije se placeholder, ale v produkci tam nech plan.png -->
+  <a class="full" href="https://github.com/Matyl2784/MAMEPLAN/releases/download/oficial_release/mameplan.apk" download>
     <img src="plan.png" onerror="this.src='https://placehold.co/1920x1080/1a1a1a/white?text=Plan.png+Missing'" alt="Obrázek přes celou obrazovku" />
   </a>
 
-  <!-- Volitelná nápověda -->
   <div class="hint">Klikni kamkoli pro stažení souboru</div>
 
-  <!-- 4. Logika pro spuštění -->
   <script>
     const enterBtn = document.getElementById('enter-btn');
     const overlay = document.getElementById('intro-overlay');
     const audio = document.getElementById('bg-music');
 
     enterBtn.addEventListener('click', function() {
-      // 1. Spustit hudbu (prohlížeče vyžadují interakci uživatele pro spuštění audia)
       audio.play().catch(function(error) {
-        console.log("Přehrávání audia selhalo (pravděpodobně chybí soubor nebo blokace prohlížeče): ", error);
+        console.log("Přehrávání audia selhalo: ", error);
       });
 
-      // 2. Skrýt overlay s efektem
       overlay.style.opacity = '0';
 
-      // 3. Po dokončení animace (0.8s) úplně odstranit overlay z DOMu, aby neblokoval klikání
       setTimeout(function() {
         overlay.style.display = 'none';
       }, 800);
