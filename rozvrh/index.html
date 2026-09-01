@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozvrh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- ZÁHLAVÍ / OVLÁDÁNÍ -->
+        <header class="header">
+            <div class="header-top">
+                <h1>Rozvrh</h1>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                    <div class="week-toggle">
+                        <button id="btn-week-a" class="toggle-btn active">Týden A</button>
+                        <button id="btn-week-b" class="toggle-btn">Týden B</button>
+                        <button id="btn-week-all" class="toggle-btn">Oba</button>
+                    </div>
+                    <button id="btn-export" class="btn-export">Export do PNG</button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="class-select">Třída</label>
+                    <select id="class-select">
+                        <option value="V4A">V4A</option>
+                        <!-- Další třídy do budoucna -->
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="focus-select">Obor / Zaměření</label>
+                    <select id="focus-select">
+                        <option value="ALL">Vše</option>
+                        <option value="SITE">SITE</option>
+                        <option value="AUTO">AUTO</option>
+                        <option value="GRAF">GRAF</option>
+                        <option value="PROG1">PROG1</option>
+                        <option value="PROG2">PROG2</option>
+                        <option value="PROG3">PROG3</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="group-select">Skupina</label>
+                    <select id="group-select">
+                        <option value="ALL">Vše</option>
+                        <option value="SKP1">SKP1</option>
+                        <option value="SKP2">SKP2</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="seminar-select">Maturitní seminář</label>
+                    <select id="seminar-select">
+                        <option value="ALL">Vše</option>
+                        <option value="MSEM">MSEm (Matematika)</option>
+                        <option value="MSEA">MSEa (Angličtina)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="day-tabs" id="day-tabs">
+                <!-- Tlačítka pro dny se vygenerují přes JS -->
+            </div>
+        </header>
+
+        <!-- HLAVNÍ OBSAH / ROZVRH -->
+        <main class="schedule-container">
+            <div class="timetable" id="timetable">
+                <!-- Tabulka se vygeneruje přes JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- DATA A LOGIKA -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
