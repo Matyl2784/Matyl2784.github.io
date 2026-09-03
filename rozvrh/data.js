@@ -37,7 +37,7 @@ const scheduleData = {
         // Ut
         { week: "A", day: 2, period: 1, duration: 1, subject: "TVY", teacher: "PEIV", room: "U60", group: "ALL" },
         { week: "A", day: 2, period: 2, duration: 1, subject: "OBN", teacher: "MALU", room: "U30", group: "ALL" },
-        { week: "A", day: 2, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U07", group: "ALL" },
+        { week: "A", day: 2, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U07", group: "MLUV" },
         { week: "A", day: 2, period: 4, duration: 1, subject: "MSEm", teacher: "PEIV", room: "U33", group: "MSEm" },
         { week: "A", day: 2, period: 4, duration: 1, subject: "MSEa", teacher: "MEMA", room: "U11", group: "MSEa1" },
         { week: "A", day: 2, period: 4, duration: 1, subject: "MSEa", teacher: "VIJA", room: "U23", group: "MSEa2" },
@@ -69,14 +69,14 @@ const scheduleData = {
         // Ct
         { week: "A", day: 4, period: 1, duration: 1, subject: "OBN", teacher: "MALU", room: "U36", group: "ALL" },
         { week: "A", day: 4, period: 2, duration: 1, subject: "MAT", teacher: "PEIV", room: "U44", group: "ALL" },
-        { week: "A", day: 4, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U22", group: "ALL" },
+        { week: "A", day: 4, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U22", group: "LIT" },
         { week: "A", day: 4, period: 4, duration: 1, subject: "TVY", teacher: "PEIV", room: "U12", group: "ALL" },
         { week: "A", day: 4, period: 5, duration: 2, subject: "OPS", teacher: "NILE", room: "U54", group: "SKP1" },
         { week: "A", day: 4, period: 6, duration: 1, subject: "ANJ", teacher: "CHAI", room: "U05", group: "SKP2" },
         { week: "A", day: 4, period: 7, duration: 1, subject: "ANJ", teacher: "MEMA", room: "U21", group: "SKP1" },
         { week: "A", day: 4, period: 7, duration: 1, subject: "ANJ", teacher: "CHAI", room: "U15", group: "SKP2" },
         // Pa
-        { week: "A", day: 5, period: 1, duration: 1, subject: "CJL", teacher: "GAMA", room: "U35", group: "ALL" },
+        { week: "A", day: 5, period: 1, duration: 1, subject: "CJL", teacher: "GAMA", room: "U35", group: "OPK" },
         { week: "A", day: 5, period: 2, duration: 1, subject: "NEJ", teacher: "GAIV", room: "U10", group: "NEJ1" },
         { week: "A", day: 5, period: 2, duration: 1, subject: "NEJ", teacher: "RYLU", room: "U24", group: "NEJ2" },
         { week: "A", day: 5, period: 3, duration: 1, subject: "EKO", teacher: "SMDA", room: "U44", group: "ALL" },
@@ -103,7 +103,7 @@ const scheduleData = {
         // Ut
         { week: "B", day: 2, period: 1, duration: 1, subject: "TVY", teacher: "PEIV", room: "U60", group: "ALL" },
         { week: "B", day: 2, period: 2, duration: 1, subject: "OBN", teacher: "MALU", room: "U30", group: "ALL" },
-        { week: "B", day: 2, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U07", group: "ALL" },
+        { week: "B", day: 2, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U07", group: "MLUV" },
         { week: "B", day: 2, period: 4, duration: 1, subject: "MSEm", teacher: "PEIV", room: "U33", group: "MSEm" },
         { week: "B", day: 2, period: 4, duration: 1, subject: "MSEa", teacher: "MEMA", room: "U11", group: "MSEa1" },
         { week: "B", day: 2, period: 4, duration: 1, subject: "MSEa", teacher: "VIJA", room: "U23", group: "MSEa2" },
@@ -135,7 +135,7 @@ const scheduleData = {
         // Ct
         { week: "B", day: 4, period: 1, duration: 1, subject: "OBN", teacher: "MALU", room: "U36", group: "ALL" },
         { week: "B", day: 4, period: 2, duration: 1, subject: "MAT", teacher: "PEIV", room: "U44", group: "ALL" },
-        { week: "B", day: 4, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U22", group: "ALL" },
+        { week: "B", day: 4, period: 3, duration: 1, subject: "CJL", teacher: "GAMA", room: "U22", group: "LIT" },
         { week: "B", day: 4, period: 4, duration: 1, subject: "TVY", teacher: "PEIV", room: "U12", group: "ALL" },
         { week: "B", day: 4, period: 5, duration: 2, subject: "OPS", teacher: "NILE", room: "U54", group: "SKP1" },
         { week: "B", day: 4, period: 6, duration: 1, subject: "ANJ", teacher: "CHAI", room: "U05", group: "SKP2" },
@@ -143,7 +143,7 @@ const scheduleData = {
         { week: "B", day: 4, period: 7, duration: 1, subject: "ANJ", teacher: "CHAI", room: "U15", group: "SKP2" },
         { week: "B", day: 4, period: 8, duration: 2, subject: "ZTD", teacher: "SMDA", room: "U08", group: "SKP2" },
         // Pa
-        { week: "B", day: 5, period: 1, duration: 1, subject: "CJL", teacher: "GAMA", room: "U35", group: "ALL" },
+        { week: "B", day: 5, period: 1, duration: 1, subject: "CJL", teacher: "GAMA", room: "U35", group: "OPK" },
         { week: "B", day: 5, period: 2, duration: 1, subject: "NEJ", teacher: "GAIV", room: "U10", group: "NEJ1" },
         { week: "B", day: 5, period: 2, duration: 1, subject: "NEJ", teacher: "RYLU", room: "U24", group: "NEJ2" },
         { week: "B", day: 5, period: 3, duration: 1, subject: "EKO", teacher: "SMDA", room: "U44", group: "ALL" },
