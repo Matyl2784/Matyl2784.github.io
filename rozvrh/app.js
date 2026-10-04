@@ -10,6 +10,8 @@ const focusSelect = document.getElementById('focus-select');
 const groupSelect = document.getElementById('group-select');
 const seminarSelect = document.getElementById('seminar-select');
 const btnExport = document.getElementById('btn-export');
+const classSelect = document.getElementById('class-select');
+let originalScheduleDataLessons = scheduleData.lessons;
 
 btnWeekA.addEventListener('click', () => setWeek('A'));
 btnWeekB.addEventListener('click', () => setWeek('B'));
@@ -17,6 +19,28 @@ btnWeekAll.addEventListener('click', () => setWeek('ALL'));
 focusSelect.addEventListener('change', renderSchedule);
 groupSelect.addEventListener('change', renderSchedule);
 seminarSelect.addEventListener('change', renderSchedule);
+
+classSelect.addEventListener('change', async (e) => {
+    const val = e.target.value;
+    if (val === 'V4A') {
+        scheduleData.lessons = originalScheduleDataLessons;
+        renderSchedule();
+    } else {
+        const file = val === 'SAJA' ? 'safi.json' : 'v3c.json';
+        try {
+            const res = await fetch(file);
+            const data = await res.json();
+            let arr = [];
+            if (data.A) data.A.forEach(l => arr.push({ ...l, week: 'A' }));
+            if (data.B) data.B.forEach(l => arr.push({ ...l, week: 'B' }));
+            scheduleData.lessons = arr;
+            renderSchedule();
+        } catch (error) {
+            console.error('Error fetching schedule:', error);
+            alert('Nepodařilo se načíst data pro ' + val);
+        }
+    }
+});
 
 if (btnExport) {
     btnExport.addEventListener('click', () => {
